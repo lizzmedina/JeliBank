@@ -17,12 +17,7 @@ public class Transfers {
     @ManyToOne
     @JoinColumn(name = "acountId")
     @JsonBackReference
-    private Long originAcount;
-
-    @ManyToOne
-    @JoinColumn(name = "acountId")
-    @JsonBackReference
-    private Long targetAcount;
+    private Acount originAcount;
 
 
     // -----------getters and setters----------------
@@ -51,20 +46,13 @@ public class Transfers {
         this.amount = amount;
     }
 
-    public Long getOriginAcount() {
+    public Acount getOriginAcount() {
         return originAcount;
     }
 
-    public void setOriginAcount(Long originAcount) {
+    public void setOriginAcount(Acount originAcount) {
         this.originAcount = originAcount;
     }
 
-    public Long getTargetAcount() {
-        return targetAcount;
-    }
-
-    public void setTargetAcount(Long targetAcount) {
-        this.targetAcount = targetAcount;
-    }
 }
 
