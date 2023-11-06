@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class PocketController {
 
-    private PocketService pocketService;
+    private final PocketService pocketService;
 
     @Autowired
     public PocketController(PocketService pocketService){
@@ -23,7 +23,7 @@ public class PocketController {
     }
 
     @PostMapping("/pocket")
-    public Pocket createPocket(Pocket pocket){
+    public Pocket createPocket(Pocket pocket) throws ResourseNotFoundException {
         return pocketService.createPocket(pocket);
     }
 

@@ -4,6 +4,7 @@ import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Acount;
 import com.example.jeliBankBackend.repository.AcountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
@@ -16,15 +17,22 @@ public class AcountService {
     private AcountRepository acountRepository;
 
     public Acount createAcount(Acount acount)throws ResourseNotFoundException{
-        return acountRepository.save(acount);
+        try {
+            return acountRepository.save(acount);
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al crear la cuenta: " + e.getMessage());
+        }
     }
-
-    public List<Acount> getAcounts(){
+   public List<Acount> getAcounts(){
         return acountRepository.findAll();
     }
 
     public Optional<Acount> getAcountById(Long acountNumber) throws ResourseNotFoundException{
-        return acountRepository.findById(acountNumber);
+        try {
+            return acountRepository.findById(acountNumber);
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
+        }
     }
 
     public Acount getAcountByNumber(Long acountNumber){
@@ -39,30 +47,34 @@ public class AcountService {
     }
 
     public Acount upDateAcount(Acount acountToUpdate) throws ResourseNotFoundException {
-
         Optional<Acount> acount = acountRepository.findById(acountToUpdate.getAcountNumber());
 
-        if (acountToUpdate != null || acount.isEmpty()){
-            acount.get().setAcountType(Objects.isNull(acountToUpdate.getAcountType()) ?
-                    acount.get().getAcountType() : acountToUpdate.getAcountType());
+        if (acount.isPresent()) {
+            try {
+                acount.get().setAcountType(Objects.isNull(acountToUpdate.getAcountType()) ?
+                        acount.get().getAcountType() : acountToUpdate.getAcountType());
+                acount.get().setBalance(Objects.isNull(acountToUpdate.getBalance()) ?
+                        acount.get().getBalance() : acountToUpdate.getBalance());
+                acount.get().setAcountNumber(Objects.isNull(acountToUpdate.getAcountNumber()) ?
+                        acount.get().getAcountNumber() : acountToUpdate.getAcountNumber());
 
-            acount.get().setBalance(Objects.isNull(acountToUpdate.getBalance()) ?
-                    acount.get().getBalance() : acountToUpdate.getBalance());
+                return  acountRepository.save(acount.get());
 
-            acount.get().setAcountNumber(Objects.isNull(acountToUpdate.getAcountNumber()) ?
-                    acount.get().getAcountNumber() : acountToUpdate.getAcountNumber());
-
-            acountRepository.save(acount.get());
-        }else  {
+            } catch (DataAccessException e) {
+                throw new ResourseNotFoundException("Error al actualizar la cuenta: " + e.getMessage());
+            }
+        } else {
             throw new ResourseNotFoundException("No existe o no fue posible actualizar la cuenta ingresada");
         }
-        return acountRepository.save(acountToUpdate);
     }
-
     public String deleteAcount(Long acountNumber) throws ResourseNotFoundException {
         if (acountRepository.findById(acountNumber).isPresent()){
-            acountRepository.deleteById(acountNumber);
-            return "Cuenta eliminada exitosamente";
+            try {
+                acountRepository.deleteById(acountNumber);
+                return "Cuenta eliminada exitosamente";
+            } catch (DataAccessException e) {
+                throw new ResourseNotFoundException("Error al eliminar la cuenta: " + e.getMessage());
+            }
         }else  {
             throw new ResourseNotFoundException("No existe o no fue posible eliminar la cuenta, por favor revise los datos ingresados e intente nuevamnete");
         }

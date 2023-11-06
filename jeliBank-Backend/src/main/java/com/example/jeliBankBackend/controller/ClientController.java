@@ -3,7 +3,6 @@ package com.example.jeliBankBackend.controller;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Client;
 import com.example.jeliBankBackend.service.ClientService;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class ClientController {
     }
 
     @PostMapping("/client")
-    public Client crateClient(Client client){
+    public Client crateClient(Client client) throws ResourseNotFoundException {
         return this.clientService.createClient(client);
     }
 
@@ -33,7 +32,7 @@ public class ClientController {
     }
 
     @GetMapping("/client/{idClient}")
-    public Optional<Client> getClientById(@PathVariable Long idClient){
+    public Optional<Client> getClientById(@PathVariable Long idClient) throws ResourseNotFoundException {
         return this.clientService.getClientById(idClient);
     }
     @GetMapping("/client/{numberDocumentId}")
