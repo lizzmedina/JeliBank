@@ -32,7 +32,7 @@ public class ClientController {
     }
 
     @GetMapping("/clients")
-    public List<Client> getAllClients() {
+    public List<Client> getAllClients() throws ResourseNotFoundException {
         return this.clientService.getAllClients();
     }
 

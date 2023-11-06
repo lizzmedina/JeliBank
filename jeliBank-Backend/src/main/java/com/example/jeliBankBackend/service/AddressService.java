@@ -24,16 +24,30 @@ public class AddressService {
         this.clientRepository = clientRepository;
     }
 
-    public Address createAddress(Address address){
-        return addressRepository.save(address);
+    public Address createAddress(Address address) throws ResourseNotFoundException {
+        try {
+            return addressRepository.save(address);
+        }catch (DataAccessException e){
+            throw new ResourseNotFoundException("no se pudo crear la dirección");
+        }
     }
 
-    public List<Address> getAllAddress(){
-        return addressRepository.findAll();
+    public List<Address> getAllAddress() throws ResourseNotFoundException {
+        try{
+            return addressRepository.findAll();
+        }catch (DataAccessException e){
+            throw new ResourseNotFoundException("no hay direcciones creadas");
+        }
+
     }
 
-    public Optional<Address> getAddressById(Long idAddress){
-        return addressRepository.findById(idAddress);
+    public Optional<Address> getAddressById(Long idAddress) throws ResourseNotFoundException {
+        try {
+            return addressRepository.findById(idAddress);
+
+        }catch (DataAccessException e){
+            throw new ResourseNotFoundException("no existe una direccion para ese id");
+        }
     }
 
     public Optional<Address> getAddressByClient(Long documentClient) throws ResourseNotFoundException {
@@ -51,28 +65,32 @@ public class AddressService {
         throw new RuntimeException("No hay ninguna direccion para el número de documento ingresado");
     }
 
-    public Address upDateAddress(Address addressToUpdate) throws ResourseNotFoundException {
-        Optional<Address> address = addressRepository.findById(addressToUpdate.getAddressId());
+    public Address upDateAddress(Long addressId, Address updatedAddress) throws ResourseNotFoundException {
+        Optional<Address> existingAddress;
+        try {
+            existingAddress = addressRepository.findById(addressId);
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al actualizar la dirección: " + e.getMessage());
+        }
+        if (existingAddress.isPresent()) {
+            Address addressToUpdate = existingAddress.get();
 
-        if (address.isPresent()) {
-            try {
-                address.get().setAddress(Objects.isNull(addressToUpdate.getAddress()) ?
-                        address.get().getAddress() : addressToUpdate.getAddress());
-                // Resto de las actualizaciones...
+            addressToUpdate.setAddress(updatedAddress.getAddress());
+            addressToUpdate.setCity(updatedAddress.getCity());
+            addressToUpdate.setNeighborhood(updatedAddress.getNeighborhood());
+            addressToUpdate.setHouseType(updatedAddress.getHouseType());
 
-                return addressRepository.save(address.get());
-            } catch (DataAccessException e) {
-                throw new ResourseNotFoundException("Error al actualizar la dirección: " + e.getMessage());
-            }
+            return addressRepository.save(addressToUpdate);
+
         } else {
             throw new ResourseNotFoundException("No existe o no fue posible actualizar la dirección ingresada");
         }
     }
 
-    public String deleteAddress(Long addresNumberId) throws ResourseNotFoundException {
-        if (addressRepository.findById(addresNumberId).isPresent()){
+    public String deleteAddress(Long addressNumberId) throws ResourseNotFoundException {
+        if (addressRepository.findById(addressNumberId).isPresent()){
             try {
-                addressRepository.deleteById(addresNumberId);
+                addressRepository.deleteById(addressNumberId);
                 return "Dirección eliminada exitosamente";
             } catch (DataAccessException e) {
                 throw new ResourseNotFoundException("Error al eliminar la dirección: " + e.getMessage());

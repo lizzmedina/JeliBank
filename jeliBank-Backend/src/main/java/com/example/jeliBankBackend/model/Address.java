@@ -2,71 +2,31 @@ package com.example.jeliBankBackend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.Optional;
 
 @Entity
+@Data
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "addressId")
     private Long addressId;
-
+    @Column(name = "address")
     private String address;
+    @Column(name = "city")
     private String city;
+    @Column(name = "neighborhood")
     private String neighborhood;
+    @Column(name = "houseType")
     private String houseType;
-
+//    @Column
+//    private Long client_id;
     @ManyToOne
     @JoinColumn(name = "client_id")
     @JsonBackReference
     private Client client;
 
-    // -----------getters and setters----------------
 
-
-    public Long getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(Long addressId) {
-        this.addressId = addressId;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getNeighborhood() {
-        return neighborhood;
-    }
-
-    public void setNeighborhood(String neighborhood) {
-        this.neighborhood = neighborhood;
-    }
-
-    public String getHouseType() {
-        return houseType;
-    }
-
-    public void setHouseType(String houseType) {
-        this.houseType = houseType;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
 }

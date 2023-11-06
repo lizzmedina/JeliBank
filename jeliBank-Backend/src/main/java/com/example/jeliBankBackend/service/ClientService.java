@@ -1,8 +1,9 @@
 package com.example.jeliBankBackend.service;
 
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
-import com.example.jeliBankBackend.model.Acount;
+import com.example.jeliBankBackend.model.Address;
 import com.example.jeliBankBackend.model.Client;
+import com.example.jeliBankBackend.repository.AddressRepository;
 import com.example.jeliBankBackend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -15,7 +16,8 @@ import java.util.Optional;
 @Service
 public class ClientService {
 
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+    //private final AddressRepository addressRepository;
 
     @Autowired
     public ClientService(ClientRepository clientRepository){
@@ -24,15 +26,19 @@ public class ClientService {
 
     public Client createClient(Client client) throws ResourseNotFoundException{
         try {
-            Client clientToSave = clientRepository.save(client);
-            return clientToSave;
+            return clientRepository.save(client);
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al crear el cliente: " + e.getMessage());
         }
     }
 
-    public List<Client> getAllClients(){
-        return clientRepository.findAll();
+    public List<Client> getAllClients() throws ResourseNotFoundException {
+        try {
+            return clientRepository.findAll();
+        }catch (DataAccessException e){
+            throw new ResourseNotFoundException("no hay clientes en la lista aún");
+        }
+
     }
 
     public Optional<Client> getClientById(Long idClient) throws ResourseNotFoundException{
@@ -69,6 +75,8 @@ public class ClientService {
                         client.get().getLastName() : clientToUpdate.getLastName());
                 client.get().setNumberDocumentId(Objects.isNull(clientToUpdate.getNumberDocumentId()) ?
                         client.get().getNumberDocumentId() : clientToUpdate.getNumberDocumentId());
+                client.get().setClient_id(Objects.isNull(clientToUpdate.getClient_id()) ?
+                        client.get().getClient_id() : clientToUpdate.getClient_id());
 
                 return clientRepository.save(client.get());
             } catch (DataAccessException e) {
