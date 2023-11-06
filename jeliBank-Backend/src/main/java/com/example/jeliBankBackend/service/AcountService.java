@@ -3,6 +3,7 @@ package com.example.jeliBankBackend.service;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Acount;
 import com.example.jeliBankBackend.repository.AcountRepository;
+import com.example.jeliBankBackend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,13 @@ import java.util.Optional;
 @Service
 public class AcountService {
 
-    @Autowired
-    private AcountRepository acountRepository;
 
+    private final AcountRepository acountRepository;
+
+    @Autowired
+    public AcountService(AcountRepository acountRepository, ClientRepository clientRepository){
+        this.acountRepository = acountRepository;
+    }
     public Acount createAcount(Acount acount)throws ResourseNotFoundException{
         try {
             return acountRepository.save(acount);
@@ -53,8 +58,7 @@ public class AcountService {
             try {
                 acount.get().setAcountType(Objects.isNull(acountToUpdate.getAcountType()) ?
                         acount.get().getAcountType() : acountToUpdate.getAcountType());
-                acount.get().setBalance(Objects.isNull(acountToUpdate.getBalance()) ?
-                        acount.get().getBalance() : acountToUpdate.getBalance());
+                acount.get().setBalance(acountToUpdate.getBalance());
                 acount.get().setAcountNumber(Objects.isNull(acountToUpdate.getAcountNumber()) ?
                         acount.get().getAcountNumber() : acountToUpdate.getAcountNumber());
 

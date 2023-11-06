@@ -16,6 +16,9 @@ public class Client {
 
     private String lastName;
 
+
+
+
     // -----------getters and setters----------------
 
     public Long getNumberDocumentId() {
