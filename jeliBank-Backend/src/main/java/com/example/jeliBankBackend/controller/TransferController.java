@@ -33,7 +33,7 @@ public class TransferController {
     }
 
     @GetMapping("/transfers/{documentClient}")
-    public Optional<Transfer> getTransfersByDocumentClient(Long documentClient) throws ResourseNotFoundException {
+    public Optional<List<Transfer>> getTransfersByDocumentClient(Long documentClient) throws ResourseNotFoundException {
         return this.transferService.getTransfersByDocumentClient(documentClient);
     }
 

@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://localhost/jelibank?serverTimezone=America/Bogota
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Jeifer05*.
+    password: admin
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true

@@ -1,20 +1,25 @@
 package com.example.jeliBankBackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "client_id")
     private Long client_id;
 
+    @Column(name = "numberDocumentId")
     private Long numberDocumentId;
+
+    @Column(name = "lastName")
+    private String lastName;
+    @Column(name = "name")
     private String name;
 
-    private String lastName;
+
 
 
 

@@ -33,11 +33,11 @@ public class TransferService {
         return transferRepository.findAll();
     }
 
-        public Optional<Transfer> getTransfersByDocumentClient(Long documentClient) throws ResourseNotFoundException {
+        public Optional<List<Transfer>> getTransfersByDocumentClient(Long documentClient) throws ResourseNotFoundException {
         Optional<Client> client = clientRepository.findById(documentClient);
         if (client.isPresent()) {
             try {
-                return TransferRepository.findTransfersByClient(client);
+                return Optional.of(transferRepository.findByOriginAcount_Client(client.get()));
             } catch (DataAccessException e) {
                 throw new ResourseNotFoundException("Error al buscar transferencias: " + e.getMessage());
             }

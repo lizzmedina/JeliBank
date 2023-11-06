@@ -43,7 +43,7 @@ public class AddressService {
         Optional<Client> clientOptional = this.clientRepository.findById(documentClient);
         if (clientOptional.isPresent()){
             try {
-                return addressRepository.findAddresByClient(documentClient);
+                return addressRepository.findByClient_NumberDocumentId(documentClient);
             }catch (DataAccessException e) {
                 throw new ResourseNotFoundException("no se encontró el documento ingresado" + e.getMessage());
             }

@@ -24,7 +24,8 @@ public class ClientService {
 
     public Client createClient(Client client) throws ResourseNotFoundException{
         try {
-            return clientRepository.save(client);
+            Client clientToSave = clientRepository.save(client);
+            return clientToSave;
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al crear el cliente: " + e.getMessage());
         }
@@ -35,18 +36,21 @@ public class ClientService {
     }
 
     public Optional<Client> getClientById(Long idClient) throws ResourseNotFoundException{
-        try {
-            return clientRepository.findById(idClient);
-        } catch (DataAccessException e) {
-            throw new ResourseNotFoundException("Error al buscar el cliente: " + e.getMessage());
-        }
+        if (idClient !=null && idClient >0){
+            try {
+                return clientRepository.findById(idClient);
+            } catch (DataAccessException e) {
+                throw new ResourseNotFoundException("Error al buscar el cliente: " + e.getMessage());
+            }
+        }else throw new  IllegalArgumentException("no es valido el id ingresadod");
+
     }
 
     public Client getClientByDocument(Long numberDocumentId){
         if (numberDocumentId <= 0){
             throw new IllegalArgumentException("El número de documento no es válido");
         }
-        Optional<Client> clientOptional = this.clientRepository.findById(numberDocumentId);
+        Optional<Client> clientOptional = this.clientRepository.findByNumberDocumentId(numberDocumentId);
         if (clientOptional.isPresent()){
             return clientOptional.get();
         }
@@ -55,7 +59,7 @@ public class ClientService {
 
     public Client upDateClient(Client clientToUpdate) throws ResourseNotFoundException {
 
-        Optional<Client> client = clientRepository.findById(clientToUpdate.getNumberDocumentId());
+        Optional<Client> client = getClientById(clientToUpdate.getClient_id());
 
         if (client.isPresent()) {
             try {

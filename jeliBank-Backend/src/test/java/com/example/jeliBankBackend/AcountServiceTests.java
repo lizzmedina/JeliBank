@@ -66,13 +66,14 @@ public class AcountServiceTests {
     }
 
     @Test
-    public void createAcount_AcountRepositoryThrowsException_ThrowsResourseNotFoundException() {
+    public void createAcount_AcountRepositoryThrowsDataAccessException_ThrowsResourseNotFoundException() {
         // Arrange
-        Acount acount = new Acount();
-        when(acountRepository.save(acount)).thenThrow(DataAccessException.class);
+        Acount acountToCreate = new Acount();
+        when(acountRepository.save(acountToCreate)).thenThrow(new DataAccessException("Simulated DataAccessException") {
+        });
 
         // Act & Assert
-        assertThrows(ResourseNotFoundException.class, () -> acountService.createAcount(acount));
+        assertThrows(ResourseNotFoundException.class, () -> acountService.createAcount(acountToCreate));
     }
 
     @Test
