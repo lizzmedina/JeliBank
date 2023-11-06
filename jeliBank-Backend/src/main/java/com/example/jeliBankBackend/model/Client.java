@@ -28,4 +28,19 @@ public class Client {
     @Column(name = "addresses")
     private final List<Address> addresses = new ArrayList<>();
 
+    public Client() {
+    }
+
+    public Client(Long numberDocumentId, String lastName, String name) {
+        this.numberDocumentId = numberDocumentId;
+        this.lastName = lastName;
+        this.name = name;
+    }
+
+    public Client(Long client_id, Long numberDocumentId, String lastName, String name) {
+        this.client_id = client_id;
+        this.numberDocumentId = numberDocumentId;
+        this.lastName = lastName;
+        this.name = name;
+    }
 }
