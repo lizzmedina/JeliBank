@@ -27,24 +27,24 @@ public class PocketController {
         return pocketService.createPocket(pocket);
     }
 
-    @GetMapping("/pockets")
-    public List<Pocket> getAllPockets(){
-        return pocketService.getAllPokets();
-    }
-    @GetMapping("/pockets/{pocketNumber}")
-    public Optional<Pocket> getPoketByNumber(Long pocketNumber) {
-        return Optional.ofNullable(this.pocketService.getPoketByNumber(pocketNumber));
-    }
-
-    @PutMapping("/acount/{pocketToDelete}")
-    public ResponseEntity<?> upDatePocket(@RequestBody Pocket pocketToDelete) throws ResourseNotFoundException {
-        pocketService.upDatePocket(pocketToDelete);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @DeleteMapping("/acount/{pocketNumber}")
-    public ResponseEntity<?> deletePocket(@PathVariable Long pocketNumber) throws ResourseNotFoundException{
-        pocketService.deletePocket(pocketNumber);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @GetMapping("/pockets")
+//    public List<Pocket> getAllPockets(){
+//        return pocketService.getAllPokets();
+//    }
+//    @GetMapping("/pockets/{pocketNumber}")
+//    public Optional<Pocket> getPoketByNumber(Long pocketNumber) {
+//        return Optional.ofNullable(this.pocketService.getPoketByNumber(pocketNumber));
+//    }
+//
+//    @PutMapping("/acount/{pocketToDelete}")
+//    public ResponseEntity<?> upDatePocket(@RequestBody Pocket pocketToDelete) throws ResourseNotFoundException {
+//        pocketService.upDatePocket(pocketToDelete);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/acount/{pocketNumber}")
+//    public ResponseEntity<?> deletePocket(@PathVariable Long pocketNumber) throws ResourseNotFoundException{
+//        pocketService.deletePocket(pocketNumber);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
