@@ -5,6 +5,7 @@ import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
+import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
@@ -26,12 +27,13 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    // 1- apertura de  cuenta
     @PostMapping()
     public AccountRequestDto createAcount (@RequestBody AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         this.accountService.createAccount(accountRequestDto);
         return accountRequestDto;
     }
-
+    // 2- deposito en cuenta
     @PostMapping("/{accountNumber}/transfer")
     public ResponseEntity<AccountResponseDepositeDto> depositIntoAccount(
             @PathVariable("accountNumber") int accountNumber,
@@ -44,6 +46,8 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseDepositeDto(0.0));
         }
     }
+
+    // 3- transferencia entre cuentas
     @PostMapping("/transfer")
     public AccountTransferToAccountRequestDto transferBetweenAccounts(
             @RequestBody AccountTransferToAccountRequestDto transferRequest) {
@@ -54,13 +58,15 @@ public class AccountController {
             return transferRequest;
         }
     }
+
+    // 4- consultar cuenta
     @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountResponseGetDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) {
         try {
-            Optional<AccountRequestDto> optionalAccount = accountService.getAcountByNumber(accountNumber);
+            Optional<AccountResponseGetDto> optionalAccount = accountService.getAccountDetails(accountNumber);
 
             if (optionalAccount.isPresent()) {
-                AccountRequestDto accountDto = optionalAccount.get();
+                AccountResponseGetDto accountDto = optionalAccount.get();
 
                 AccountResponseGetDto response = new AccountResponseGetDto(
                         accountNumber,
@@ -77,8 +83,10 @@ public class AccountController {
         }
     }
 
+    //5- bloquear cuenta
+
     @PutMapping("/block")
-    public ResponseEntity<String> toggleAccountStatus(@RequestBody AccountStatusRequestDto requestDto) {
+    public ResponseEntity<String> blockAccount(@RequestBody AccountStatusRequestDto requestDto) {
         try {
             String response = accountService.toggleAccountStatus(requestDto);
             return ResponseEntity.ok(response);

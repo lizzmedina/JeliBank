@@ -12,20 +12,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Pocket {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pocketNumber;
-
-    private String poketName;
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private int pocketNumber;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "balance")
     private double balance;
 
     @ManyToOne
-    @JoinColumn(name = "accounNumber")
-    @JsonBackReference
+    @JoinColumn(name = "account_number")
     private Account account;
 
-    public Pocket(String poketName, double balance) {
-        this.poketName = poketName;
+    public Pocket(String name, double balance) {
+        this.name = name;
         this.balance = balance;
     }
 }

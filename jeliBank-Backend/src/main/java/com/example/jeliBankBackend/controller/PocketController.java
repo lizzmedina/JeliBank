@@ -1,50 +1,49 @@
 package com.example.jeliBankBackend.controller;
 
+import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
+import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
+import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
+import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
-import com.example.jeliBankBackend.model.Pocket;
+import com.example.jeliBankBackend.service.AccountService;
 import com.example.jeliBankBackend.service.PocketService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/pockets")
 public class PocketController {
-
+    private final AccountService accountService;
     private final PocketService pocketService;
 
-    @Autowired
-    public PocketController(PocketService pocketService){
+    public PocketController(AccountService accountService, PocketService pocketService) {
+        this.accountService = accountService;
         this.pocketService = pocketService;
     }
 
-    @PostMapping("/pocket")
-    public Pocket createPocket(Pocket pocket) throws ResourseNotFoundException {
-        return pocketService.createPocket(pocket);
+    @PostMapping()
+    public ResponseEntity<PocketResponseDto> createPocket(@RequestBody PocketRequestDto requestDto) throws ResourseNotFoundException {
+        try {
+            // Obtener la cuenta asociada al número de cuenta proporcionado
+            Optional<AccountResponseGetDto> accountOptional = accountService.getAccountDetails(requestDto.getAccountNumber());
+
+            if (accountOptional.isPresent()) {
+                AccountResponseGetDto accountDto = accountOptional.get();
+
+                // Crear el bolsillo y asociarlo a la cuenta
+                PocketResponseDto pocketResponse = new PocketResponseDto(requestDto.getAccountNumber(), requestDto.getName(), requestDto.getBalance());
+
+                // Devolver la respuesta del bolsillo creado
+                return ResponseEntity.ok(pocketResponse);
+            } else {
+                throw new ResourseNotFoundException("Cuenta no encontrada");
+            }
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al crear el bolsillo: " + e.getMessage());
+        }
     }
 
-//    @GetMapping("/pockets")
-//    public List<Pocket> getAllPockets(){
-//        return pocketService.getAllPokets();
-//    }
-//    @GetMapping("/pockets/{pocketNumber}")
-//    public Optional<Pocket> getPoketByNumber(Long pocketNumber) {
-//        return Optional.ofNullable(this.pocketService.getPoketByNumber(pocketNumber));
-//    }
-//
-//    @PutMapping("/acount/{pocketToDelete}")
-//    public ResponseEntity<?> upDatePocket(@RequestBody Pocket pocketToDelete) throws ResourseNotFoundException {
-//        pocketService.upDatePocket(pocketToDelete);
-//        return ResponseEntity.ok(HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/acount/{pocketNumber}")
-//    public ResponseEntity<?> deletePocket(@PathVariable Long pocketNumber) throws ResourseNotFoundException{
-//        pocketService.deletePocket(pocketNumber);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 }

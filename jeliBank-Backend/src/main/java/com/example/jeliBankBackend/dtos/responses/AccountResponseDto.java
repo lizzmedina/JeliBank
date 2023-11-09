@@ -12,7 +12,7 @@ public class AccountResponseDto {
     public AccountResponseDto() {
     }
 
-    public AccountResponseDto(String ownerName, Double initialAmount) {
+    public AccountResponseDto( String ownerName, Double initialAmount) {
         this.ownerName = ownerName;
         this.initialAmount = initialAmount;
     }

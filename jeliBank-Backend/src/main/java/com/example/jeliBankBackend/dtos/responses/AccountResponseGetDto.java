@@ -13,6 +13,11 @@ public class AccountResponseGetDto {
     public AccountResponseGetDto() {
     }
 
+    public AccountResponseGetDto(String ownerName, double balance) {
+        this.ownerName = ownerName;
+        this.balance = balance;
+    }
+
     public AccountResponseGetDto(int accountNumber, String ownerName, double balance) {
         this.accountNumber = accountNumber;
         this.ownerName = ownerName;

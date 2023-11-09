@@ -2,10 +2,9 @@ package com.example.jeliBankBackend.service;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseTransferDto;
+import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.repository.AccountRepository;
@@ -25,25 +24,8 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public AccountRequestDto toDto(Account createdAccount) {
-        AccountRequestDto accountRequestDto = new AccountRequestDto(
-                createdAccount.getOwnerName(), createdAccount.getBalance());
-        return accountRequestDto;
-    }
 
-    public Account toEntity(AccountRequestDto accountRequestDto) {
-        Account account = new Account(
-                accountRequestDto.getOwnerName(),
-                accountRequestDto.getBalance());
-        return account;
-    }
-
-    private int generateAccountNumber() {
-        Random random = new Random();
-        int accountNumberInt = 1000000000 + random.nextInt(900000000);
-        return accountNumberInt;
-    }
-
+// 1- apertura de  cuenta
     public AccountResponseDto createAccount(AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         try {
             int accountNumber = generateAccountNumber();
@@ -55,7 +37,8 @@ public class AccountService {
             double balance = accountRequestDto.getBalance();
 
 
-            Account account = new Account(accountNumber, ownerName, balance);
+            Account account = new Account( accountNumber, ownerName, balance);
+
             accountRepository.save(account);
 
             AccountResponseDto responseDto = new AccountResponseDto(ownerName, balance);
@@ -66,24 +49,7 @@ public class AccountService {
         }
     }
 
-    public Optional<AccountRequestDto> getAcountByNumber(int acountNumber) throws ResourseNotFoundException {
-        try {
-            Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(acountNumber);
-            if (accountOptional.isPresent()) {
-                Account account = accountOptional.get();
-                AccountRequestDto accountRequestDto = new AccountRequestDto(
-                        account.getOwnerName(),
-                        account.getBalance()
-                );
-                return Optional.of(accountRequestDto);
-            } else {
-                return Optional.empty();
-            }
-        } catch (DataAccessException e) {
-            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
-        }
-    }
-
+// 2- deposito en cuenta
     public double depositIntoAccount(int accountNumber, double amountToDeposit) throws ResourseNotFoundException {
         try {
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
@@ -111,6 +77,7 @@ public class AccountService {
         }
     }
 
+    // 3- transferencia entre cuentas
     public AccountTransferToAccountRequestDto transferBetweenAccounts(AccountTransferToAccountRequestDto transferRequest) throws ResourseNotFoundException {
         int sourceAccountNumber = transferRequest.getSourceAccountNumber();
         int destinationAccountNumber = transferRequest.getDestinationAccountNumber();
@@ -138,7 +105,34 @@ public class AccountService {
             throw new ResourseNotFoundException("Cuenta de origen o destino no encontrada");
         }
     }
+    // 4- traer datos de la cuenta
+    public Optional<AccountResponseGetDto> getAccountDetails(int accountNumber) throws ResourseNotFoundException {
+        try {
+            Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(accountNumber);
 
+            if (accountOptional.isPresent()) {
+                Account account = accountOptional.get();
+                AccountRequestDto accountRequestDto = new AccountRequestDto(
+                        account.getOwnerName(),
+                        account.getBalance()
+                );
+
+                //  AccountRequestDto to AccountResponseDto
+                AccountResponseGetDto response = new AccountResponseGetDto(
+                        accountNumber,
+                        accountRequestDto.getOwnerName(),
+                        accountRequestDto.getBalance());
+
+                return Optional.of(response);
+            } else {
+                return Optional.empty();
+            }
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
+        }
+    }
+
+    // 5- bloquear cuenta
     public String toggleAccountStatus(AccountStatusRequestDto requestDto) throws ResourseNotFoundException {
         try {
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(requestDto.getAccountNumber());
@@ -157,6 +151,52 @@ public class AccountService {
             throw new ResourseNotFoundException("Error al actualizar el estado de la cuenta: " + e.getMessage());
         }
     }
+
+    // otros metodos ------------------------------------------------------------------------------------------------
+
+    // cambiar una cuenta de tipo AccountRequestDto a entidad cuenta
+    public Account AccountRequestDtotoEntity(AccountRequestDto accountRequestDto) {
+        Account account = new Account(
+                accountRequestDto.getOwnerName(),
+                accountRequestDto.getBalance());
+        return account;
+    }
+    //cambiar una cuenta de tipo AccountResponseGetDto a entidad cuenta
+    public Account AccountResponseGetDtotoEntity(AccountResponseGetDto accountResponseDto) {
+        Account account = new Account(
+                accountResponseDto.getOwnerName(),
+                accountResponseDto.getBalance());
+        return account;
+    }
+    // cambiar una entidad cuenta a dto del tipo AccountRequestDto
+    public AccountRequestDto toDto(Account createdAccount) {
+        AccountRequestDto accountRequestDto = new AccountRequestDto(
+                createdAccount.getOwnerName(), createdAccount.getBalance());
+        return accountRequestDto;
+    }
+    // generar numero de cuenta aleatoriamente
+    public int generateAccountNumber() {
+        Random random = new Random();
+        int accountNumberInt = 1000000000 + random.nextInt(900000000);
+        return accountNumberInt;
+    }
+    // modificar el saldo de cuenta
+    public void updateAccountBalance(int accountNumber, double newBalance) throws ResourseNotFoundException {
+        try {
+            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
+
+            if (optionalAccount.isPresent()) {
+                Account account = optionalAccount.get();
+                account.setBalance(newBalance);
+                accountRepository.save(account);
+            } else {
+                throw new ResourseNotFoundException("Cuenta no encontrada");
+            }
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al actualizar el saldo de la cuenta: " + e.getMessage());
+        }
+    }
+
 
 //    public String deleteAcount(Long acountNumber) throws ResourseNotFoundException {
 //        if (acountRepository.findById(acountNumber).isPresent()){

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 public class Account {
     @Id
-    @Column(name = "accountNumber")
+    @Column(name = "account_number")
     private int accountNumber;
     @Column(name = "ownerName")
     private String ownerName;
@@ -25,9 +25,7 @@ public class Account {
     @Column(name = "isActive")
     private boolean isActive = true;
 
-    @OneToMany
-    @JoinColumn(name = "pocketId")
-    @JsonBackReference
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pocket> pockets = new ArrayList<>();
 
     public Account( String ownerName, double balance) {
