@@ -75,29 +75,10 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseGetDto(0, "", 0.0));
         }
     }
-//    @GetMapping()
-//    public List<Acount> getAcounts(){
-//        return this.acountService.getAcounts();
-//    }
-//    @GetMapping("/acounts/{acountId}")
-//    public Optional<Acount> getAcountById(@PathVariable("acountId") Long acountId) throws ResourseNotFoundException {
-//        return this.acountService.getAcountById(acountId);
-//    }
 
-//    @GetMapping("/acounts/{acountNumber}")
-//    public Optional<Acount> getAcountByNumber(@PathVariable("acountNumber") Long acountNumber) throws ResourseNotFoundException {
-//        return Optional.ofNullable(this.acountService.getAcountByNumber(acountNumber));
-//    }
-//    @PutMapping("/acount/{acountToDelete}")
-//    public ResponseEntity<?> upDateAcount(@RequestBody Acount acountToDelete) throws ResourseNotFoundException{
-//        acountService.upDateAcount(acountToDelete);
-//        return ResponseEntity.ok(HttpStatus.OK);
-//    }
-//
 //    @DeleteMapping("/acount/{acountNumber}")
 //    public ResponseEntity<?> deleteAcount(@PathVariable Long acountNumber) throws ResourseNotFoundException{
-//        acountService.deleteAcount(acountNumber);
+//        accountService.deleteAcount(acountNumber);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
-
 }

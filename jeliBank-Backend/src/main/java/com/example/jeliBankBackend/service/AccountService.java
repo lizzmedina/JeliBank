@@ -46,8 +46,13 @@ public class AccountService {
     public AccountResponseDto createAccount(AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         try {
             int accountNumber = generateAccountNumber();
+            if (accountRepository.getAccountByAccountNumber(accountNumber).isPresent()) {
+                throw new ResourseNotFoundException("Ya existe una cuenta con el número de cuenta proporcionado.");
+            }
+
             String ownerName = accountRequestDto.getOwnerName();
             double balance = accountRequestDto.getBalance();
+
 
             Account account = new Account(accountNumber, ownerName, balance);
             accountRepository.save(account);
@@ -84,11 +89,19 @@ public class AccountService {
             if (optionalAccount.isPresent()) {
                 Account account = optionalAccount.get();
                 double currentBalance = account.getBalance();
-                double newBalance = currentBalance + amountToDeposit;
 
-                account.setBalance(newBalance);
-                accountRepository.save(account);
-                return newBalance;
+                if (currentBalance >= amountToDeposit) {
+
+                    double newBalance = currentBalance + amountToDeposit;
+
+                    account.setBalance(newBalance);
+                    accountRepository.save(account);
+
+                    return newBalance;
+
+                } else {
+                    throw new ResourseNotFoundException("Saldo insuficiente en la cuenta");
+                }
             } else {
                 throw new ResourseNotFoundException("Cuenta no encontrada");
             }
@@ -124,69 +137,7 @@ public class AccountService {
             throw new ResourseNotFoundException("Cuenta de origen o destino no encontrada");
         }
     }
-
-//    public Optional<AccountRequestDto> getAcountByNumber(int accountNumber) throws ResourseNotFoundException {
-//        try {
-//            Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(accountNumber);
-//            if (accountOptional.isPresent()) {
-//                Account account = accountOptional.get();
-//                AccountRequestDto accountRequestDto = new AccountRequestDto(
-//                        account.getOwnerName(),
-//                        account.getBalance()
-//                );
-//                return Optional.of(accountRequestDto);
-//            } else {
-//                return Optional.empty();
-//            }
-//        } catch (DataAccessException e) {
-//            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
-//        }
-//    }
-
-
-//   public List<Acount> getAcounts(){
-//        return acountRepository.findAll();
-//    }
 //
-//    public Optional<Acount> getAcountById(Long acountNumber) throws ResourseNotFoundException{
-//        try {
-//            return acountRepository.findById(acountNumber);
-//        } catch (DataAccessException e) {
-//            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
-//        }
-//    }
-
-//    public Acount getAcountByNumber(Long acountNumber){
-//        if (acountNumber <= 0){
-//            throw new IllegalArgumentException("El número de cuenta no es válido");
-//        }
-//        Optional<Acount> acountOptional = this.acountRepository.findById(acountNumber);
-//        if (acountOptional.isPresent()){
-//            return acountOptional.get();
-//        }
-//        throw new RuntimeException("No hay ninguna cuenta para el número ingresado");
-//    }
-//
-//    public Acount upDateAcount(Acount acountToUpdate) throws ResourseNotFoundException {
-//        Optional<Acount> acount = acountRepository.findById(acountToUpdate.getAcountNumber());
-//
-//        if (acount.isPresent()) {
-//            try {
-//                acount.get().setAcountType(Objects.isNull(acountToUpdate.getAcountType()) ?
-//                        acount.get().getAcountType() : acountToUpdate.getAcountType());
-//                acount.get().setBalance(acountToUpdate.getBalance());
-//                acount.get().setAcountNumber(Objects.isNull(acountToUpdate.getAcountNumber()) ?
-//                        acount.get().getAcountNumber() : acountToUpdate.getAcountNumber());
-//
-//                return  acountRepository.save(acount.get());
-//
-//            } catch (DataAccessException e) {
-//                throw new ResourseNotFoundException("Error al actualizar la cuenta: " + e.getMessage());
-//            }
-//        } else {
-//            throw new ResourseNotFoundException("No existe o no fue posible actualizar la cuenta ingresada");
-//        }
-//    }
 //    public String deleteAcount(Long acountNumber) throws ResourseNotFoundException {
 //        if (acountRepository.findById(acountNumber).isPresent()){
 //            try {
