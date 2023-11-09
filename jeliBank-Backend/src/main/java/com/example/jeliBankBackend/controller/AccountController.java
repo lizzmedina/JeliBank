@@ -4,12 +4,15 @@ import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
+import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/accounts")
@@ -48,6 +51,28 @@ public class AccountController {
             return ResponseEntity.ok(response).getBody();
         } catch (ResourseNotFoundException e) {
             return transferRequest;
+        }
+    }
+    @GetMapping("/{accountNumber}")
+    public ResponseEntity<AccountResponseGetDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) {
+        try {
+            Optional<AccountRequestDto> optionalAccount = accountService.getAcountByNumber(accountNumber);
+
+            if (optionalAccount.isPresent()) {
+                AccountRequestDto accountDto = optionalAccount.get();
+
+                AccountResponseGetDto response = new AccountResponseGetDto(
+                        accountNumber,
+                        accountDto.getOwnerName(),
+                        accountDto.getBalance()
+                );
+
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (ResourseNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseGetDto(0, "", 0.0));
         }
     }
 //    @GetMapping()

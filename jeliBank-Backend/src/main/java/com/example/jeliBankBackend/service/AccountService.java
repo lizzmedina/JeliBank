@@ -18,8 +18,9 @@ import java.util.Random;
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
+
     @Autowired
-    public AccountService(AccountRepository accountRepository){
+    public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
@@ -28,10 +29,11 @@ public class AccountService {
                 createdAccount.getOwnerName(), createdAccount.getBalance());
         return accountRequestDto;
     }
-  public Account toEntity(AccountRequestDto accountRequestDto) {
-       Account account = new Account(
-               accountRequestDto.getOwnerName(),
-               accountRequestDto.getBalance());
+
+    public Account toEntity(AccountRequestDto accountRequestDto) {
+        Account account = new Account(
+                accountRequestDto.getOwnerName(),
+                accountRequestDto.getBalance());
         return account;
     }
 
@@ -50,14 +52,15 @@ public class AccountService {
             Account account = new Account(accountNumber, ownerName, balance);
             accountRepository.save(account);
 
-            AccountResponseDto responseDto= new AccountResponseDto( ownerName, balance);
+            AccountResponseDto responseDto = new AccountResponseDto(ownerName, balance);
 
             return responseDto;
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al crear la cuenta: " + e.getMessage());
         }
     }
-    public Optional<AccountRequestDto> getAcountByNumber(int acountNumber) throws ResourseNotFoundException{
+
+    public Optional<AccountRequestDto> getAcountByNumber(int acountNumber) throws ResourseNotFoundException {
         try {
             Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(acountNumber);
             if (accountOptional.isPresent()) {
@@ -121,6 +124,25 @@ public class AccountService {
             throw new ResourseNotFoundException("Cuenta de origen o destino no encontrada");
         }
     }
+
+//    public Optional<AccountRequestDto> getAcountByNumber(int accountNumber) throws ResourseNotFoundException {
+//        try {
+//            Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(accountNumber);
+//            if (accountOptional.isPresent()) {
+//                Account account = accountOptional.get();
+//                AccountRequestDto accountRequestDto = new AccountRequestDto(
+//                        account.getOwnerName(),
+//                        account.getBalance()
+//                );
+//                return Optional.of(accountRequestDto);
+//            } else {
+//                return Optional.empty();
+//            }
+//        } catch (DataAccessException e) {
+//            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
+//        }
+//    }
+
 
 //   public List<Acount> getAcounts(){
 //        return acountRepository.findAll();
