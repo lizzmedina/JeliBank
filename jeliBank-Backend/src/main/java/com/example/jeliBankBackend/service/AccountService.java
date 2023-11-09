@@ -1,6 +1,7 @@
 package com.example.jeliBankBackend.service;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
@@ -71,13 +72,18 @@ public class AccountService {
             throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
         }
     }
-    public void updateAccountBalance(int accountNumber, double newBalance) throws ResourseNotFoundException {
+
+    public double depositIntoAccount(int accountNumber, double amountToDeposit) throws ResourseNotFoundException {
         try {
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
             if (optionalAccount.isPresent()) {
                 Account account = optionalAccount.get();
+                double currentBalance = account.getBalance();
+                double newBalance = currentBalance + amountToDeposit;
+
                 account.setBalance(newBalance);
                 accountRepository.save(account);
+                return newBalance;
             } else {
                 throw new ResourseNotFoundException("Cuenta no encontrada");
             }

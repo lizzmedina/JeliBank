@@ -1,6 +1,5 @@
 package com.example.jeliBankBackend.repository;
 
-import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

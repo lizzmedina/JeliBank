@@ -1,6 +1,7 @@
 package com.example.jeliBankBackend.controller;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
@@ -28,26 +29,14 @@ public class AccountController {
         return accountRequestDto;
     }
 
-    @PostMapping("/{accountNumber}/deposit")
+    @PostMapping("/{accountNumber}/transfer")
     public ResponseEntity<AccountResponseDepositeDto> depositIntoAccount(
             @PathVariable("accountNumber") int accountNumber,
-            @RequestBody double amount) {
-
+            @RequestBody AccountTransferRequestDto depositRequest) {
         try {
-            Optional<AccountRequestDto> optionalAccount = accountService.getAcountByNumber(accountNumber);
-
-            if (optionalAccount.isPresent()) {
-                AccountRequestDto accountDto = optionalAccount.get();
-                double currentBalance = accountDto.getBalance();
-                double newBalance = currentBalance + amount;
-
-                accountService.updateAccountBalance(accountNumber, newBalance);
-
-                AccountResponseDepositeDto response = new AccountResponseDepositeDto(newBalance);
-                return ResponseEntity.ok(response);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            double newBalance = accountService.depositIntoAccount(accountNumber, depositRequest.getAmountToDeposite());
+            AccountResponseDepositeDto response = new AccountResponseDepositeDto(newBalance);
+            return ResponseEntity.ok(response);
         } catch (ResourseNotFoundException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseDepositeDto(0.0));
         }
