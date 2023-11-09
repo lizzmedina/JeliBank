@@ -2,7 +2,9 @@ package com.example.jeliBankBackend.service;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
+import com.example.jeliBankBackend.dtos.responses.AccountResponseTransferDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.repository.AccountRepository;
@@ -89,6 +91,34 @@ public class AccountService {
             }
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al actualizar el saldo de la cuenta: " + e.getMessage());
+        }
+    }
+
+    public AccountTransferToAccountRequestDto transferBetweenAccounts(AccountTransferToAccountRequestDto transferRequest) throws ResourseNotFoundException {
+        int sourceAccountNumber = transferRequest.getSourceAccountNumber();
+        int destinationAccountNumber = transferRequest.getDestinationAccountNumber();
+        double amount = transferRequest.getAmount();
+
+        Optional<Account> optionalSourceAccount = accountRepository.getAccountByAccountNumber(sourceAccountNumber);
+        Optional<Account> optionalDestinationAccount = accountRepository.getAccountByAccountNumber(destinationAccountNumber);
+
+        if (optionalSourceAccount.isPresent() && optionalDestinationAccount.isPresent()) {
+            Account sourceAccount = optionalSourceAccount.get();
+            Account destinationAccount = optionalDestinationAccount.get();
+
+            if (sourceAccount.getBalance() >= amount) {
+                sourceAccount.setBalance(sourceAccount.getBalance() - amount);
+                destinationAccount.setBalance(destinationAccount.getBalance() + amount);
+
+                accountRepository.save(sourceAccount);
+                accountRepository.save(destinationAccount);
+
+                return new AccountTransferToAccountRequestDto(sourceAccountNumber, destinationAccountNumber, amount);
+            } else {
+                throw new ResourseNotFoundException("Fondos insuficientes en la cuenta de origen");
+            }
+        } else {
+            throw new ResourseNotFoundException("Cuenta de origen o destino no encontrada");
         }
     }
 

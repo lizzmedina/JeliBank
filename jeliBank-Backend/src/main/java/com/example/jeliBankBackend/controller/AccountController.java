@@ -2,6 +2,7 @@ package com.example.jeliBankBackend.controller;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/accounts")
@@ -41,8 +40,16 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseDepositeDto(0.0));
         }
     }
-//    @PostMapping("/transfer")
-//    public
+    @PostMapping("/transfer")
+    public AccountTransferToAccountRequestDto transferBetweenAccounts(
+            @RequestBody AccountTransferToAccountRequestDto transferRequest) {
+        try {
+            AccountTransferToAccountRequestDto response = accountService.transferBetweenAccounts(transferRequest);
+            return ResponseEntity.ok(response).getBody();
+        } catch (ResourseNotFoundException e) {
+            return transferRequest;
+        }
+    }
 //    @GetMapping()
 //    public List<Acount> getAcounts(){
 //        return this.acountService.getAcounts();
