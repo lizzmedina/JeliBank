@@ -22,6 +22,9 @@ public class Account {
     @Column(name = "balance")
     private  double balance;
 
+    @Column(name = "isActive")
+    private boolean isActive = true;
+
     @OneToMany
     @JoinColumn(name = "pocketId")
     @JsonBackReference
@@ -39,5 +42,15 @@ public class Account {
     }
 
     public Account() {
+    }
+
+    // ... otros métodos ...
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

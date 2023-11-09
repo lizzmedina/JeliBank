@@ -1,6 +1,7 @@
 package com.example.jeliBankBackend.controller;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
@@ -73,6 +74,16 @@ public class AccountController {
             }
         } catch (ResourseNotFoundException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseGetDto(0, "", 0.0));
+        }
+    }
+
+    @PutMapping("/block")
+    public ResponseEntity<String> toggleAccountStatus(@RequestBody AccountStatusRequestDto requestDto) {
+        try {
+            String response = accountService.toggleAccountStatus(requestDto);
+            return ResponseEntity.ok(response);
+        } catch (ResourseNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cuenta no encontrada");
         }
     }
 

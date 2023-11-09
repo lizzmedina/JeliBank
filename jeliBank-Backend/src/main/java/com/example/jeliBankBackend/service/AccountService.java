@@ -1,6 +1,7 @@
 package com.example.jeliBankBackend.service;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
@@ -137,7 +138,26 @@ public class AccountService {
             throw new ResourseNotFoundException("Cuenta de origen o destino no encontrada");
         }
     }
-//
+
+    public String toggleAccountStatus(AccountStatusRequestDto requestDto) throws ResourseNotFoundException {
+        try {
+            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(requestDto.getAccountNumber());
+
+            if (optionalAccount.isPresent()) {
+                Account account = optionalAccount.get();
+                account.setIsActive(!account.getIsActive());
+                accountRepository.save(account);
+
+                String statusMessage = account.getIsActive() ? "Cuenta activada" : "Cuenta desactivada";
+                return statusMessage;
+            } else {
+                throw new ResourseNotFoundException("Cuenta no encontrada");
+            }
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al actualizar el estado de la cuenta: " + e.getMessage());
+        }
+    }
+
 //    public String deleteAcount(Long acountNumber) throws ResourseNotFoundException {
 //        if (acountRepository.findById(acountNumber).isPresent()){
 //            try {
