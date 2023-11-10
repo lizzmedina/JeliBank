@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+
 import java.util.Optional;
 import java.util.Random;
 
@@ -20,7 +21,6 @@ import java.util.Random;
 public class AccountService {
     private final AccountRepository accountRepository;
 
-    @Autowired
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -108,10 +108,10 @@ public class AccountService {
     public Optional<AccountResponseGetDto> getAccountDetails(int accountNumber) throws ResourseNotFoundException {
 
         try {
-            Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(accountNumber);
+            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
 
-            if (accountOptional.isPresent()) {
-                Account account = accountOptional.get();
+            if (optionalAccount.isPresent()) {
+                Account account = optionalAccount.get();
                 AccountRequestDto accountRequestDto = new AccountRequestDto(
                         account.getOwnerName(),
                         account.getBalance()
