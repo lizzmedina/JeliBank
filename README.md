@@ -44,22 +44,23 @@ This set of technologies offers a solid and efficient environment for the develo
   1. Clone the repository to your local machine:
       git clone https://github.com/lizzmedina/JeliBank.git
       
-  2. Navega al directorio del proyecto:  
-      ``` bash
-      cd tuproyecto
-      ```
-  3. Configure the database in the application.properties file with your MySQL credentials
+  2. Navega al directorio del proyecto:
+     
+          ``` bash
+          cd tuproyecto
+          ```
+  4. Configure the database in the application.properties file with your MySQL credentials
 
 ## Compilation and Execution
   1. Compile the project using Maven:  
-      ```bash
-      mvn clean install
-      ```
+          ```bash
+          mvn clean install
+          ```
   2. Run the Spring Boot application:
   
-      ```bash
-      mvn spring-boot:run
-      ```
+          ```bash
+          mvn spring-boot:run
+          ```
 The application will be available at [http://localhost:8080](http://localhost:8080).
 
 ## Application Usage
@@ -70,7 +71,10 @@ The application will be available at [http://localhost:8080](http://localhost:80
 
 ##### Create an Account:
   Post
-  Endpoint: /api/accounts
+  Endpoint: 
+         ``` bash
+          /api/accounts
+          ```
   Description: Creates a new pocket associated with the account.
    BodyRequest: 
       ``` bash
@@ -81,7 +85,10 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ```
 ##### Deposit into an Account:
   Post
-  Endpoint: /api/accounts/{accountNumber}/deposit
+  Endpoint: 
+        ``` bash 
+        /api/accounts/{accountNumber}/deposit
+        ```
   Description: Deposits funds into the specified account.
   BodyRequest: 
      ``` bash             
@@ -92,7 +99,10 @@ The application will be available at [http://localhost:8080](http://localhost:80
 
 ##### Transfer Money between Accounts:
   Post
-  Endpoint: /api/accounts/transfer
+  Endpoint: 
+      ``` bash
+        /api/accounts/transfer
+      ```  
   Description: Transfers funds from one account to another.
   BodyRequest:  
       ``` bash
@@ -104,12 +114,18 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ```           
 ##### Retrieve Account Information:
   Get
-  Endpoint: /api/accounts/{accountNumber}
+  Endpoint: 
+      ``` bash
+          /api/accounts/{accountNumber}
+      ```
   Description: Retrieves detailed information about a specific account.
   
 ##### Lock/Unlock an Account:
   Put
-  Endpoint: /api/accounts/lock/{accountNumber}
+  Endpoint:
+    ``` bash
+      /api/accounts/lock/{accountNumber}
+    ``` 
   Description: Locks or unlocks the specified account for added security.
   BodyRequest:  
       ``` bash
@@ -122,7 +138,10 @@ The application will be available at [http://localhost:8080](http://localhost:80
 
 ##### Create a Pocket:
   Post
-  Endpoint: /api/pockets
+  Endpoint:
+    ``` bash
+      /api/pockets
+    ``` 
   Description: Creates a new pocket associated with the account.
   BodyRequest:
       ``` bash
@@ -136,7 +155,11 @@ The application will be available at [http://localhost:8080](http://localhost:80
   
 ##### Deposit into a Pocket from Associated Account:
   Post
-  Endpoint: /api/pockets/deposit
+  Endpoint:
+    ``` bash
+      /api/pockets/deposit
+    ```
+
   Description: Deposits funds into a pocket from the associated account.
   BodyRequest:
       ``` bash
@@ -150,7 +173,11 @@ The application will be available at [http://localhost:8080](http://localhost:80
 
 ##### Retrieve Associated Pockets:
   Get
-  Endpoint: /api/pockets/{accountNumber}
+  Endpoint: 
+    ``` bash
+        /api/pockets/{accountNumber}
+    ```
+  
   Description: Retrieves a list of pockets associated with the specified account.
 
 Users can interact with these functionalities either through a user-friendly interface or by utilizing the provided API endpoints. For API interactions, examples of HTTP requests can be provided using tools like cURL or Postman.
