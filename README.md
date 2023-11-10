@@ -74,8 +74,9 @@ The application will be available at [http://localhost:8080](http://localhost:80
   Endpoint: 
          ``` /api/accounts
           ```
-  Description: Creates a new pocket associated with the account.
-   BodyRequest: 
+  Description: Creates a new pocket associated with the account.  
+  BodyRequest: 
+  
       ``` 
               {    
                 "ownerName":"lina",
@@ -105,8 +106,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
   Description: Transfers funds from one account to another.
   BodyRequest:  
      
-      ```
-              {
+      ```     {
                 "sourceAccountNumber":1482758457 ,
                 "destinationAccountNumber": 1289678331,
                 "amount":100.0
