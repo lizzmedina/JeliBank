@@ -44,16 +44,14 @@ This set of technologies offers a solid and efficient environment for the develo
   1. Clone the repository to your local machine:
       git clone https://github.com/lizzmedina/JeliBank.git
       
-  2. Navega al directorio del proyecto:
-  
+  2. Navega al directorio del proyecto:  
       ``` bash
       cd tuproyecto
       ```
   3. Configure the database in the application.properties file with your MySQL credentials
 
 ## Compilation and Execution
-  1. Compile the project using Maven:
-  
+  1. Compile the project using Maven:  
       ```bash
       mvn clean install
       ```
@@ -75,31 +73,35 @@ The application will be available at [http://localhost:8080](http://localhost:80
   Endpoint: /api/accounts
   Description: Creates a new pocket associated with the account.
    BodyRequest: 
+      ``` bash
               {    
                 "ownerName":"lina",
                 "balance": 100.0
               }
-  
+      ```
 ##### Deposit into an Account:
   Post
   Endpoint: /api/accounts/{accountNumber}/deposit
   Description: Deposits funds into the specified account.
   BodyRequest: 
+     ``` bash             
               {
                 "amountToDeposite": 200000.0
               }
+     ```
 
 ##### Transfer Money between Accounts:
   Post
   Endpoint: /api/accounts/transfer
   Description: Transfers funds from one account to another.
-  BodyRequest:
+  BodyRequest:  
+      ``` bash
               {
                 "sourceAccountNumber":1482758457 ,
                 "destinationAccountNumber": 1289678331,
                 "amount":100.0
               }
-  
+      ```           
 ##### Retrieve Account Information:
   Get
   Endpoint: /api/accounts/{accountNumber}
@@ -109,11 +111,13 @@ The application will be available at [http://localhost:8080](http://localhost:80
   Put
   Endpoint: /api/accounts/lock/{accountNumber}
   Description: Locks or unlocks the specified account for added security.
-  BodyRequest:
+  BodyRequest:  
+      ``` bash
               {
                 "accountNumber" : 1289678331
               }
-  
+      ```
+                
 #### Pocket Operations:
 
 ##### Create a Pocket:
@@ -121,22 +125,28 @@ The application will be available at [http://localhost:8080](http://localhost:80
   Endpoint: /api/pockets
   Description: Creates a new pocket associated with the account.
   BodyRequest:
+      ``` bash
               {
                 "accountNumber": 1354238369,
                 "name": "viajes",
                 "balance": 20.0
               }
+      ```
+
   
 ##### Deposit into a Pocket from Associated Account:
   Post
   Endpoint: /api/pockets/deposit
   Description: Deposits funds into a pocket from the associated account.
   BodyRequest:
+      ``` bash
               {
                 "accountNumber": 1503171576,
                 "pocketNumber": 1 ,
                 "amount": 5.0 
               }
+      ```
+              
 
 ##### Retrieve Associated Pockets:
   Get
