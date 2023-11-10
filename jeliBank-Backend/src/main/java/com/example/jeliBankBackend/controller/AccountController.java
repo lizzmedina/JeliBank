@@ -5,12 +5,10 @@ import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("api/accounts")
 public class AccountController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Autowired
     public AccountController(AccountService accountService){
@@ -33,66 +31,33 @@ public class AccountController {
         this.accountService.createAccount(accountRequestDto);
         return accountRequestDto;
     }
+
     // 2- deposito en cuenta
     @PostMapping("/{accountNumber}/transfer")
-    public ResponseEntity<AccountResponseDepositeDto> depositIntoAccount(
-            @PathVariable("accountNumber") int accountNumber,
-            @RequestBody AccountTransferRequestDto depositRequest) {
-        try {
-            double newBalance = accountService.depositIntoAccount(accountNumber, depositRequest.getAmountToDeposite());
-            AccountResponseDepositeDto response = new AccountResponseDepositeDto(newBalance);
-            return ResponseEntity.ok(response);
-        } catch (ResourseNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseDepositeDto(0.0));
-        }
+    public AccountResponseDepositeDto depositIntoAccount(@PathVariable("accountNumber") int accountNumber, @RequestBody AccountTransferRequestDto depositRequest) throws ResourseNotFoundException {
+        AccountResponseDepositeDto response = this.accountService.depositIntoAccount(accountNumber, depositRequest.getAmountToDeposite());
+        return response;
     }
 
     // 3- transferencia entre cuentas
     @PostMapping("/transfer")
-    public AccountTransferToAccountRequestDto transferBetweenAccounts(
-            @RequestBody AccountTransferToAccountRequestDto transferRequest) {
-        try {
+    public AccountTransferToAccountRequestDto transferBetweenAccounts( @RequestBody AccountTransferToAccountRequestDto transferRequest) throws ResourseNotFoundException {
             AccountTransferToAccountRequestDto response = accountService.transferBetweenAccounts(transferRequest);
             return ResponseEntity.ok(response).getBody();
-        } catch (ResourseNotFoundException e) {
-            return transferRequest;
-        }
     }
 
     // 4- consultar cuenta
     @GetMapping("/{accountNumber}")
-    public ResponseEntity<AccountResponseGetDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) {
-        try {
-            Optional<AccountResponseGetDto> optionalAccount = accountService.getAccountDetails(accountNumber);
-
-            if (optionalAccount.isPresent()) {
-                AccountResponseGetDto accountDto = optionalAccount.get();
-
-                AccountResponseGetDto response = new AccountResponseGetDto(
-                        accountNumber,
-                        accountDto.getOwnerName(),
-                        accountDto.getBalance()
-                );
-
-                return ResponseEntity.ok(response);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (ResourseNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AccountResponseGetDto(0, "", 0.0));
-        }
+    public Optional<AccountResponseGetDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) throws ResourseNotFoundException {
+        Optional<AccountResponseGetDto> response = this.accountService.getAccountDetails(accountNumber);
+        return response;
     }
 
     //5- bloquear cuenta
-
     @PutMapping("/block")
-    public ResponseEntity<String> blockAccount(@RequestBody AccountStatusRequestDto requestDto) {
-        try {
+    public ResponseEntity<String> blockAccount(@RequestBody AccountStatusRequestDto requestDto) throws ResourseNotFoundException {
             String response = accountService.toggleAccountStatus(requestDto);
             return ResponseEntity.ok(response);
-        } catch (ResourseNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cuenta no encontrada");
-        }
     }
 
 //    @DeleteMapping("/acount/{acountNumber}")

@@ -1,9 +1,10 @@
 package com.example.jeliBankBackend.service;
 
-import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
+import com.example.jeliBankBackend.dtos.requests.PocketTransferRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
+import com.example.jeliBankBackend.dtos.responses.PocketTransferResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.model.Pocket;
@@ -16,49 +17,49 @@ import java.util.Optional;
 
 @Service
 public class PocketService {
-
-
     private final PocketRepository pocketRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
 
-    public PocketService(PocketRepository pocketRepository, AccountRepository accountRepository, AccountService accountService){
+    public PocketService(PocketRepository pocketRepository, AccountRepository accountRepository, AccountService accountService) {
         this.pocketRepository = pocketRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
     }
 
-    public PocketResponseDto createPocket( PocketRequestDto requestDto) throws ResourseNotFoundException {
+    // 1- crear bolsillo
+    public PocketResponseDto createPocket(PocketRequestDto requestDto) throws ResourseNotFoundException {
+
         int accountNumber = requestDto.getAccountNumber();
+
         try {
-            // Obtener la cuenta asociada al número de cuenta proporcionado
             Optional<AccountResponseGetDto> accountOptional = accountService.getAccountDetails(accountNumber);
 
             if (accountOptional.isPresent()) {
                 AccountResponseGetDto accountDto = accountOptional.get();
-
-                // Crear y guardar la cuenta (si no existe)
                 Account account = accountService.AccountResponseGetDtotoEntity(accountDto);
 
-                // Verificar si la cuenta ya está en la base de datos
                 if (account.getAccountNumber() == 0) {
-                    account.setAccountNumber(accountService.generateAccountNumber()); // Generar un número de cuenta único
-                    accountRepository.save(account); // Guardar la cuenta en la base de datos
+                    throw new ResourseNotFoundException("La cuenta asociada al bolsillo no existe");
                 }
 
-                // Crear el bolsillo y asociarlo a la cuenta
-                Pocket pocket = new Pocket();
-                pocket.setAccount(account);
-                pocket.setName(requestDto.getName());
-                pocket.setBalance(requestDto.getBalance());
+                double requestedBalance = requestDto.getBalance();
 
-                // Guardar el bolsillo en la base de datos
-                pocketRepository.save(pocket);
+                if (accountDto.getBalance() >= requestedBalance) {
 
-                // Descontar el saldo del bolsillo del saldo de la cuenta principal
-                accountService.updateAccountBalance(accountNumber, accountDto.getBalance() - requestDto.getBalance());
+                    accountService.updateAccountBalance(accountNumber, accountDto.getBalance() - requestedBalance);
 
-                return new PocketResponseDto(accountNumber, pocket.getName(), pocket.getBalance());
+                    Pocket pocket = new Pocket();
+                    pocket.setAccount(account);
+                    pocket.setName(requestDto.getName());
+                    pocket.setBalance(requestedBalance);
+
+                    pocketRepository.save(pocket);
+
+                    return new PocketResponseDto(accountNumber, pocket.getName(), pocket.getBalance());
+                } else {
+                    throw new ResourseNotFoundException("Saldo insuficiente en la cuenta principal");
+                }
             } else {
                 throw new ResourseNotFoundException("Cuenta no encontrada");
             }
@@ -66,57 +67,44 @@ public class PocketService {
             throw new ResourseNotFoundException("Error al crear el bolsillo: " + e.getMessage());
         }
     }
+    // 1- transferir a bolsillos
+    public PocketTransferResponseDto transferToPocket(PocketTransferRequestDto infoPocket) throws ResourseNotFoundException {
+        try {
+            Optional<Pocket> optionalPocket = pocketRepository.findById(infoPocket.getPocketNumber());
+            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(infoPocket.getAccountNumber());
+
+            Account account = optionalAccount.get();         // tengo la cuenta
+            Pocket pocket = optionalPocket.get();            // tengo el bolsillo
+            //-----
+            double amountToTransfer = infoPocket.getAmount(); // valor a transferir -> 20
+            //-----
+            int accountNumber = account.getAccountNumber(); // numero de la cuenta
+            //-----
+            int pocketNumber = infoPocket.getPocketNumber(); // numero del bolsillo
+            //-----
+            double currentAccountBalance = account.getBalance();    // saldo cuenta actual -> 100
+            //-----
+            double currentPocketBalance = pocket.getBalance(); // saldo del bolsillo actual -> 50
+            //-----
+            double newPocketBalance = currentPocketBalance + amountToTransfer; // nuevo saldo bolsillo -> 50 + 20
+            double newAccounBalance = currentAccountBalance - amountToTransfer;// nuevo saldo cuenta -> 100 - 20
+            //-----
+            if (currentAccountBalance >= amountToTransfer) {
+                accountService.updateAccountBalance(accountNumber, newAccounBalance); // actualizo el saldo de la cuenta
+                pocket.setBalance(newPocketBalance); // actualizo el saldo del bolsillo
+                pocketRepository.save(pocket); // guardo el bolsillo
+            }
+            return new PocketTransferResponseDto(accountNumber, pocketNumber, amountToTransfer);
+        } catch (DataAccessException e) {
+            throw new ResourseNotFoundException("Error al transferir el dinero al bolsillo: " + e.getMessage());
+        }
+    }
+}
 
 
 
-//    public List<Pocket> getAllPokets(){
-//        return pocketRepository.findAll();
-//    }
-//
-//    public Optional<Pocket> getPocketById(Long id) throws ResourseNotFoundException {
-//        try {
-//            return pocketRepository.findById(id);
-//        } catch (DataAccessException e) {
-//            throw new ResourseNotFoundException("Error al buscar el bolsillo: " + e.getMessage());
-//        }
-//    }
-//
-//    public Pocket getPoketByNumber(Long pocketNumber){
-//        if (pocketNumber <= 0){
-//            throw new IllegalArgumentException("El número de bolsillo no es válido");
-//        }
-//        Optional<Pocket> pocketOptional = this.pocketRepository.findById(pocketNumber);
-//        if (pocketOptional.isPresent()){
-//            return pocketOptional.get();
-//        }
-//        throw new RuntimeException("No hay ningun bolsillo para el número ingresado");
-//    }
-//    public Pocket upDatePocket(Pocket pocketToUpdate) throws ResourseNotFoundException {
-//
-//        Optional<Pocket> pocket = pocketRepository.findById(pocketToUpdate.getPocketNumber());
-//
-//        if (pocket.isPresent()) {
-//            try {
-//                pocket.get().setPocketNumber(Objects.isNull(pocketToUpdate.getPocketNumber()) ?
-//                        pocket.get().getPocketNumber() : pocketToUpdate.getPocketNumber());
-//
-//                pocket.get().setBalance(pocketToUpdate.getBalance());
-//
-//                pocket.get().setBalance(pocketToUpdate.getBalance());
-//
-//                pocket.get().setPoketName(Objects.isNull(pocketToUpdate.getPoketName()) ?
-//                        pocket.get().getPoketName() : pocketToUpdate.getPoketName());
-//
-//                return pocketRepository.save(pocket.get());
-//
-//            } catch (DataAccessException e) {
-//                throw new ResourseNotFoundException("Error al actualizar el bolsillo: " + e.getMessage());
-//            }
-//        } else {
-//            throw new ResourseNotFoundException("No existe o no fue posible actualizar el bolsillo ingresado");
-//        }
-//    }
-//
+
+
 //    public String deletePocket(Long PocketNumber) throws ResourseNotFoundException {
 //        if (pocketRepository.findById(PocketNumber).isPresent()) {
 //            try {
@@ -129,4 +117,4 @@ public class PocketService {
 //            throw new ResourseNotFoundException("No existe o no fue posible eliminar el bolsillo, por favor revise los datos ingresados e intente nuevamente");
 //        }
 //    }
-}
+

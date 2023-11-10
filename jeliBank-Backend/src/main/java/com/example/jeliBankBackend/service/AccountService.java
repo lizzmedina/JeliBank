@@ -3,6 +3,7 @@ package com.example.jeliBankBackend.service;
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
+import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
@@ -26,7 +27,7 @@ public class AccountService {
 
 
 // 1- apertura de  cuenta
-    public AccountResponseDto createAccount(AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
+    public AccountResponseDto createAccount( AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         try {
             int accountNumber = generateAccountNumber();
             if (accountRepository.getAccountByAccountNumber(accountNumber).isPresent()) {
@@ -50,25 +51,22 @@ public class AccountService {
     }
 
 // 2- deposito en cuenta
-    public double depositIntoAccount(int accountNumber, double amountToDeposit) throws ResourseNotFoundException {
+    public AccountResponseDepositeDto depositIntoAccount(int accountNumber, double amountToDeposit) throws ResourseNotFoundException {
+
         try {
+            validateDepositInput(accountNumber, amountToDeposit);
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
+
             if (optionalAccount.isPresent()) {
+
                 Account account = optionalAccount.get();
                 double currentBalance = account.getBalance();
 
-                if (currentBalance >= amountToDeposit) {
+                double newBalance = currentBalance + amountToDeposit;
 
-                    double newBalance = currentBalance + amountToDeposit;
-
-                    account.setBalance(newBalance);
-                    accountRepository.save(account);
-
-                    return newBalance;
-
-                } else {
-                    throw new ResourseNotFoundException("Saldo insuficiente en la cuenta");
-                }
+                account.setBalance(newBalance);
+                accountRepository.save(account);
+                return new AccountResponseDepositeDto(newBalance);
             } else {
                 throw new ResourseNotFoundException("Cuenta no encontrada");
             }
@@ -76,6 +74,7 @@ public class AccountService {
             throw new ResourseNotFoundException("Error al actualizar el saldo de la cuenta: " + e.getMessage());
         }
     }
+
 
     // 3- transferencia entre cuentas
     public AccountTransferToAccountRequestDto transferBetweenAccounts(AccountTransferToAccountRequestDto transferRequest) throws ResourseNotFoundException {
@@ -105,8 +104,9 @@ public class AccountService {
             throw new ResourseNotFoundException("Cuenta de origen o destino no encontrada");
         }
     }
-    // 4- traer datos de la cuenta
+    // 4- consultar cuenta
     public Optional<AccountResponseGetDto> getAccountDetails(int accountNumber) throws ResourseNotFoundException {
+
         try {
             Optional<Account> accountOptional = accountRepository.getAccountByAccountNumber(accountNumber);
 
@@ -117,7 +117,6 @@ public class AccountService {
                         account.getBalance()
                 );
 
-                //  AccountRequestDto to AccountResponseDto
                 AccountResponseGetDto response = new AccountResponseGetDto(
                         accountNumber,
                         accountRequestDto.getOwnerName(),
@@ -164,6 +163,7 @@ public class AccountService {
     //cambiar una cuenta de tipo AccountResponseGetDto a entidad cuenta
     public Account AccountResponseGetDtotoEntity(AccountResponseGetDto accountResponseDto) {
         Account account = new Account(
+                accountResponseDto.getAccountNumber(),
                 accountResponseDto.getOwnerName(),
                 accountResponseDto.getBalance());
         return account;
@@ -194,6 +194,12 @@ public class AccountService {
             }
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al actualizar el saldo de la cuenta: " + e.getMessage());
+        }
+    }
+    //validar valores del deposito
+    private void validateDepositInput(int accountNumber, double amountToDeposit) {
+        if (accountNumber <= 0 || amountToDeposit <= 0) {
+            throw new IllegalArgumentException("Número de cuenta y monto a depositar deben ser mayores que cero.");
         }
     }
 

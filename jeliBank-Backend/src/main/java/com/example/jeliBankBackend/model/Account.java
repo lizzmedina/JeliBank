@@ -25,7 +25,7 @@ public class Account {
     @Column(name = "isActive")
     private boolean isActive = true;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Pocket> pockets = new ArrayList<>();
 
     public Account( String ownerName, double balance) {

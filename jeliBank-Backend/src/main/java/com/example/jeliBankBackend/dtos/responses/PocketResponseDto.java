@@ -7,11 +7,11 @@ import lombok.Setter;
 public class PocketResponseDto {
     private int accountNumber;
     private String name;
-    private double balance;
+    private double initialBalance;
 
-    public PocketResponseDto(int accountNumber, String name, double balance) {
+    public PocketResponseDto(int accountNumber, String name, double initialBalance) {
         this.accountNumber = accountNumber;
         this.name = name;
-        this.balance = balance;
+        this.initialBalance = initialBalance;
     }
 }

@@ -2,8 +2,10 @@ package com.example.jeliBankBackend.controller;
 
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
+import com.example.jeliBankBackend.dtos.requests.PocketTransferRequestDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
 import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
+import com.example.jeliBankBackend.dtos.responses.PocketTransferResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import com.example.jeliBankBackend.service.PocketService;
@@ -24,26 +26,21 @@ public class PocketController {
         this.pocketService = pocketService;
     }
 
+    // 1- crear bolsillo
     @PostMapping()
     public ResponseEntity<PocketResponseDto> createPocket(@RequestBody PocketRequestDto requestDto) throws ResourseNotFoundException {
-        try {
-            // Obtener la cuenta asociada al número de cuenta proporcionado
-            Optional<AccountResponseGetDto> accountOptional = accountService.getAccountDetails(requestDto.getAccountNumber());
-
-            if (accountOptional.isPresent()) {
-                AccountResponseGetDto accountDto = accountOptional.get();
-
-                // Crear el bolsillo y asociarlo a la cuenta
-                PocketResponseDto pocketResponse = new PocketResponseDto(requestDto.getAccountNumber(), requestDto.getName(), requestDto.getBalance());
-
-                // Devolver la respuesta del bolsillo creado
-                return ResponseEntity.ok(pocketResponse);
-            } else {
-                throw new ResourseNotFoundException("Cuenta no encontrada");
-            }
-        } catch (DataAccessException e) {
-            throw new ResourseNotFoundException("Error al crear el bolsillo: " + e.getMessage());
-        }
+        PocketResponseDto pocketResponse = pocketService.createPocket(requestDto);
+        return ResponseEntity.ok(pocketResponse);
     }
 
+    // 1- transferir a bolsillos
+    @PostMapping("transfer")
+    public ResponseEntity<PocketTransferResponseDto> transferToPocket(@RequestBody PocketTransferRequestDto pocket) throws ResourseNotFoundException {
+        PocketTransferResponseDto response = this.pocketService.transferToPocket(pocket);
+        return ResponseEntity.ok(response);
+    }
+
+
+//    @PostMapping("/transfer")
+//    public PocketRequestDto
 }

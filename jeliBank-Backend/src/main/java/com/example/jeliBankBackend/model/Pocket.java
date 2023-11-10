@@ -12,7 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Pocket {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pocket_sequence_generator")
+    @SequenceGenerator(name = "pocket_sequence_generator", sequenceName = "pocket_sequence", allocationSize = 1)
     private int pocketNumber;
     @Column(name = "name")
     private String name;
