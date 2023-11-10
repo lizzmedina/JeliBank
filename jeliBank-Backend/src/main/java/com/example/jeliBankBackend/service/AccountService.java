@@ -160,6 +160,7 @@ public class AccountService {
                 accountRequestDto.getBalance());
         return account;
     }
+
     //cambiar una cuenta de tipo AccountResponseGetDto a entidad cuenta
     public Account AccountResponseGetDtotoEntity(AccountResponseGetDto accountResponseDto) {
         Account account = new Account(
@@ -168,18 +169,21 @@ public class AccountService {
                 accountResponseDto.getBalance());
         return account;
     }
+
     // cambiar una entidad cuenta a dto del tipo AccountRequestDto
     public AccountRequestDto toDto(Account createdAccount) {
         AccountRequestDto accountRequestDto = new AccountRequestDto(
                 createdAccount.getOwnerName(), createdAccount.getBalance());
         return accountRequestDto;
     }
+
     // generar numero de cuenta aleatoriamente
     public int generateAccountNumber() {
         Random random = new Random();
         int accountNumberInt = 1000000000 + random.nextInt(900000000);
         return accountNumberInt;
     }
+
     // modificar el saldo de cuenta
     public void updateAccountBalance(int accountNumber, double newBalance) throws ResourseNotFoundException {
         try {
@@ -196,6 +200,7 @@ public class AccountService {
             throw new ResourseNotFoundException("Error al actualizar el saldo de la cuenta: " + e.getMessage());
         }
     }
+
     //validar valores del deposito
     private void validateDepositInput(int accountNumber, double amountToDeposit) {
         if (accountNumber <= 0 || amountToDeposit <= 0) {
