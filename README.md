@@ -72,8 +72,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
 ##### Create an Account:
   Post
   Endpoint: 
-         ``` 
-          /api/accounts
+         ``` /api/accounts
           ```
   Description: Creates a new pocket associated with the account.
    BodyRequest: 
@@ -85,14 +84,14 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ```
 ##### Deposit into an Account:
   Post
-  Endpoint: 
+  Endpoint:   
         ```  
-        /api/accounts/{accountNumber}/deposit
+          /api/accounts/{accountNumber}/deposit
         ```
   Description: Deposits funds into the specified account.
   BodyRequest: 
-     ``` bash             
-              {
+  
+     ```      {
                 "amountToDeposite": 200000.0
               }
      ```
@@ -105,6 +104,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ```  
   Description: Transfers funds from one account to another.
   BodyRequest:  
+     
       ```
               {
                 "sourceAccountNumber":1482758457 ,
@@ -127,6 +127,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
     ``` 
   Description: Locks or unlocks the specified account for added security.
   BodyRequest:  
+  
       ```     {
                 "accountNumber" : 1289678331
               }
@@ -141,6 +142,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
     ``` 
   Description: Creates a new pocket associated with the account.
   BodyRequest:
+  
       ```     {
                 "accountNumber": 1354238369,
                 "name": "viajes",
@@ -157,6 +159,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
 
   Description: Deposits funds into a pocket from the associated account.
   BodyRequest:
+  
       ```     {
                 "accountNumber": 1503171576,
                 "pocketNumber": 1 ,
