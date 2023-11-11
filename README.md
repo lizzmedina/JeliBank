@@ -80,7 +80,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ``` 
               {    
                 "ownerName":"lina",
-                "balance": 100.0
+                "initialAmount": 100.0
               }
       ```
 ##### Deposit into an Account:
@@ -109,7 +109,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ```     {
                 "sourceAccountNumber":1482758457 ,
                 "destinationAccountNumber": 1289678331,
-                "amount":100.0
+                "amountToTransfer":100.0
               }
       ```           
 ##### Retrieve Account Information:
