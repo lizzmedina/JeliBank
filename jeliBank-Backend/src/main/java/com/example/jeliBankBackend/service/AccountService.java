@@ -1,9 +1,6 @@
 package com.example.jeliBankBackend.service;
 
-import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountBlockRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountDepositeRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
+import com.example.jeliBankBackend.dtos.requests.*;
 import com.example.jeliBankBackend.dtos.responses.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
@@ -104,22 +101,43 @@ public class AccountService {
     }
 
     // 4- consultar cuenta
-    public Optional<AccountGetResponseDto> getAccountDetails(int accountNumber) throws ResourseNotFoundException {
-
+//    public Optional<AccountGetResponseDto> getAccountDetails(AccountGetRequestDto accountNumber) throws ResourseNotFoundException {
+//        try {
+//            int NumberAccount = accountNumber.getAccountNumber();
+//            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(NumberAccount);
+//
+//            if (optionalAccount.isPresent()) {
+//                Account account = optionalAccount.get();
+//                AccountRequestDto accountRequestDto = new AccountRequestDto(
+//                        account.getOwnerName(),
+//                        account.getBalance()
+//                );
+//                AccountGetResponseDto response = new AccountGetResponseDto(
+//                        NumberAccount,
+//                        accountRequestDto.getOwnerName(),
+//                        accountRequestDto.getInitialAmount());
+//
+//                return Optional.of(response);
+//            } else {
+//                return Optional.empty();
+//            }
+//        } catch (DataAccessException e) {
+//            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
+//        }
+//    }
+    public Optional<AccountGetResponseDto> getAccountDetails(AccountGetRequestDto accountNumberDto) throws ResourseNotFoundException {
         try {
+            int accountNumber = accountNumberDto.getAccountNumber();
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
 
             if (optionalAccount.isPresent()) {
                 Account account = optionalAccount.get();
-                AccountRequestDto accountRequestDto = new AccountRequestDto(
-                        account.getOwnerName(),
-                        account.getBalance()
-                );
 
                 AccountGetResponseDto response = new AccountGetResponseDto(
                         accountNumber,
-                        accountRequestDto.getOwnerName(),
-                        accountRequestDto.getInitialAmount());
+                        account.getOwnerName(),
+                        account.getBalance()
+                );
 
                 return Optional.of(response);
             } else {
@@ -129,6 +147,8 @@ public class AccountService {
             throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
         }
     }
+
+
 
     // 5- bloquear cuenta
     public AccountBlockResponseDto toggleAccountStatus(AccountBlockRequestDto requestDto) throws ResourseNotFoundException {

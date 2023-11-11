@@ -40,9 +40,12 @@ public class PocketController {
     }
     // 3 - consultar bolsillos
     @GetMapping("{accountNumber}")
-    public List<PocketGetResponseDto> getPocketList(@PathVariable("accountNumber") PocketGetRequestDto accountNumber) throws ResourseNotFoundException {
-        int account = accountNumber.getAccountNumber();
-        List<PocketGetResponseDto> response = this.pocketService.getPocketsByAccount(account);
+    public List<PocketGetResponseDto> getPocketList(@PathVariable("accountNumber") int accountNumber) throws ResourseNotFoundException {
+        PocketGetRequestDto pocketGetRequestDto = new PocketGetRequestDto(accountNumber);
+        pocketGetRequestDto.setAccountNumber(accountNumber);
+        //int account = accountNumber.getAccountNumber();
+        List<PocketGetResponseDto> response = this.pocketService.getPocketsByAccount(pocketGetRequestDto);
         return response;
     }
+
 }

@@ -1,12 +1,6 @@
 package com.example.jeliBankBackend.context;
-import com.example.jeliBankBackend.dtos.requests.AccountDepositeRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountBlockRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountBlockResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountDepositeResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
+import com.example.jeliBankBackend.dtos.requests.*;
+import com.example.jeliBankBackend.dtos.responses.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.repository.AccountRepository;
@@ -44,7 +38,7 @@ public class AcountServiceTests {
 
         // Asserts
         assertEquals("John Doe", response.getOwnerName());
-        assertEquals(1000.0, response.getInitialAmount());
+        assertEquals(1000.0, response.getBalance());
     }
     @Test
     public void testCreateAccount_DuplicateAccountNumber() {
@@ -145,13 +139,13 @@ public class AcountServiceTests {
         when(accountRepository.getAccountByAccountNumber(destinationAccountNumber)).thenReturn(Optional.of(destinationAccount));
 
         // Act
-        AccountTransferRequestDto result = accountService.transferBetweenAccounts(
+        AccountTransferResponseDto result = accountService.transferBetweenAccounts(
                 new AccountTransferRequestDto(sourceAccountNumber, destinationAccountNumber, transferAmount));
 
         // Assert
         assertEquals(sourceAccountNumber, result.getSourceAccountNumber());
         assertEquals(destinationAccountNumber, result.getDestinationAccountNumber());
-        assertEquals(transferAmount, result.getAmountToTransfer(), 0.001);
+        assertEquals(transferAmount, result.getAmount(), 0.001);
         assertEquals(initialSourceBalance - transferAmount, sourceAccount.getBalance(), 0.001);
         assertEquals(initialDestinationBalance + transferAmount, destinationAccount.getBalance(), 0.001);
         verify(accountRepository, times(2)).save(any());
@@ -184,12 +178,13 @@ public class AcountServiceTests {
         // Arrange
         int accountNumber = 123456;
         double initialBalance = 1000.0;
+        AccountGetResponseDto response = new AccountGetResponseDto(accountNumber, "John Doe", initialBalance);
 
         Account account = new Account(accountNumber, "John Doe", initialBalance);
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.of(account));
 
         // Act
-        Optional<AccountGetResponseDto> result = accountService.getAccountDetails(accountNumber);
+        Optional<AccountGetResponseDto> result = accountService.getAccountDetails(new AccountGetRequestDto(accountNumber));
 
         // Assert
         assertTrue(result.isPresent());
@@ -197,6 +192,7 @@ public class AcountServiceTests {
         assertEquals("John Doe", result.get().getOwnerName());
         assertEquals(initialBalance, result.get().getBalance(), 0.001);
     }
+
     @Test
     public void testGetAccountDetails_AccountNotFound() throws ResourseNotFoundException {
         // Arrange
@@ -204,11 +200,12 @@ public class AcountServiceTests {
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.empty());
 
         // Act
-        Optional<AccountGetResponseDto> result = accountService.getAccountDetails(accountNumber);
+        Optional<AccountGetResponseDto> result = accountService.getAccountDetails(new AccountGetRequestDto(accountNumber));
 
         // Assert
         assertFalse(result.isPresent());
     }
+
 
     @Test
     void testToggleAccountStatus_AccountExists_ActiveToInactive() throws ResourseNotFoundException {

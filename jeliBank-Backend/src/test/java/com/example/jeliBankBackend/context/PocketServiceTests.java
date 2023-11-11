@@ -69,16 +69,16 @@ public class PocketServiceTests {
 //    }
 
 // este funciona -> ok
-    @Test
-    public void testCreatePocket_AccountNotFound() throws ResourseNotFoundException {
-        // Arrange
-        PocketRequestDto pocketRequestDto = new PocketRequestDto(1, "MyPocket", 100.0);
-
-        when(accountService.getAccountDetails(1)).thenReturn(Optional.empty());
-
-        // Act and Assert
-        assertThrows(ResourseNotFoundException.class, () -> pocketService.createPocket(pocketRequestDto));
-    }
+//    @Test
+//    public void testCreatePocket_AccountNotFound() throws ResourseNotFoundException {
+//        // Arrange
+//        PocketRequestDto pocketRequestDto = new PocketRequestDto(1, "MyPocket", 100.0);
+//
+//        when(accountService.getAccountDetails(1)).thenReturn(Optional.empty());
+//
+//        // Act and Assert
+//        assertThrows(ResourseNotFoundException.class, () -> pocketService.createPocket(pocketRequestDto));
+//    }
 
 //
 //

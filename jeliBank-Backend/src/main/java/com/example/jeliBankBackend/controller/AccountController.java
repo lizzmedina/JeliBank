@@ -1,10 +1,7 @@
 package com.example.jeliBankBackend.controller;
 
 import com.example.jeliBankBackend.dtos.requests.*;
-import com.example.jeliBankBackend.dtos.responses.AccountBlockResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountDepositeResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountTransferResponseDto;
+import com.example.jeliBankBackend.dtos.responses.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +23,9 @@ public class AccountController {
 
     // 1- apertura de  cuenta
     @PostMapping()
-    public AccountRequestDto createAcount (@RequestBody AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
-        this.accountService.createAccount(accountRequestDto);
-        return accountRequestDto;
+    public AccountResponseDto createAcount (@RequestBody AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
+        System.out.println("controller create account " + accountRequestDto );
+            return this.accountService.createAccount(accountRequestDto);
     }
 
     // 2- deposito en cuenta
@@ -47,9 +44,10 @@ public class AccountController {
 
     // 4- consultar cuenta
     @GetMapping("/{accountNumber}")
-    public Optional<AccountGetResponseDto> getAccountDetails(@PathVariable("accountNumber") AccountGetRequestDto accountNumber) throws ResourseNotFoundException {
-        int account = accountNumber.getAccountNumber();
-        Optional<AccountGetResponseDto> response = this.accountService.getAccountDetails(account);
+    public Optional<AccountGetResponseDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) throws ResourseNotFoundException {
+        AccountGetRequestDto accountNumberDto = new AccountGetRequestDto(accountNumber);
+        accountNumberDto.setAccountNumber(accountNumber);
+        Optional<AccountGetResponseDto> response = this.accountService.getAccountDetails(accountNumberDto);
         return response;
     }
 
@@ -59,9 +57,4 @@ public class AccountController {
           return accountService.toggleAccountStatus(requestDto);
     }
 
-//   @DeleteMapping("/acount/{acountNumber}")
-//    public ResponseEntity<?> deleteAcount(@PathVariable Long acountNumber) throws ResourseNotFoundException{
-//        accountService.deleteAcount(acountNumber);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//   }
 }

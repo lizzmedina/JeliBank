@@ -7,14 +7,14 @@ import lombok.Setter;
 @Setter
 public class AccountResponseDto {
     private String ownerName;
-    private Double initialAmount;
+    private Double balance;
 
     public AccountResponseDto() {
     }
 
-    public AccountResponseDto( String ownerName, Double initialAmount) {
+    public AccountResponseDto( String ownerName, Double balance) {
         this.ownerName = ownerName;
-        this.initialAmount = initialAmount;
+        this.balance = balance;
     }
 
 }

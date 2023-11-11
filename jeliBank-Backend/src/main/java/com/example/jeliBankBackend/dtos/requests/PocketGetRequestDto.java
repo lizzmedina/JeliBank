@@ -7,4 +7,8 @@ import lombok.Setter;
 @Setter
 public class PocketGetRequestDto {
     private int accountNumber;
+
+    public PocketGetRequestDto(int accountNumber) {
+        this.accountNumber = accountNumber;
+    }
 }

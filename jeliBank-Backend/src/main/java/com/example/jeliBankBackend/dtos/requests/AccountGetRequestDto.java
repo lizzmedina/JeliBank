@@ -8,4 +8,7 @@ import lombok.Setter;
 public class AccountGetRequestDto {
     private int accountNumber;
 
+    public AccountGetRequestDto(int accountNumber) {
+        this.accountNumber = accountNumber;
+    }
 }

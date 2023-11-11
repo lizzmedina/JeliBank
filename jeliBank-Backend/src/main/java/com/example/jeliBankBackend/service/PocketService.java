@@ -1,5 +1,6 @@
 package com.example.jeliBankBackend.service;
 
+import com.example.jeliBankBackend.dtos.requests.AccountGetRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketGetRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketDepositeRequestDto;
@@ -37,7 +38,7 @@ public class PocketService {
         int accountNumber = requestDto.getAccountNumber();
 
         try {
-            Optional<AccountGetResponseDto> accountOptional = accountService.getAccountDetails(accountNumber);
+            Optional<AccountGetResponseDto> accountOptional = accountService.getAccountDetails(new AccountGetRequestDto(accountNumber));
 
             if (accountOptional.isPresent()) {
                 AccountGetResponseDto accountDto = accountOptional.get();
@@ -105,19 +106,21 @@ public class PocketService {
     }
 
     // 3 - consultar bolsillos (traer lista de bolsillos por cuenta
-    public List<PocketGetResponseDto> getPocketsByAccount(int accountNumber) throws ResourseNotFoundException {
+    public List<PocketGetResponseDto> getPocketsByAccount(PocketGetRequestDto accountNumber) throws ResourseNotFoundException {
         System.out.println("account number from  service" + accountNumber);
+
         try {
-            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
+            int numberAccount = accountNumber.getAccountNumber();
+            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(numberAccount);
 
             if (optionalAccount.isPresent()) {
                 Account account = optionalAccount.get();
                 List<Pocket> pockets = account.getPockets();
-                System.out.println("pokets from service 1 " + pockets);
+
                 List<PocketGetResponseDto> pocketGetResponseDtos = pockets.stream()
                         .map(pocket -> new PocketGetResponseDto(pocket.getName(), pocket.getPocketNumber(), pocket.getBalance()))
                         .collect(Collectors.toList());
-                System.out.println("pokets from service 1 " + pocketGetResponseDtos);
+
                 return pocketGetResponseDtos;
 
             } else {
