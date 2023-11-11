@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PocketResponseGetDto {
+public class PocketGetResponseDto {
     private String name;
     private int pocketNumber;
     private double amount;
 
-    public PocketResponseGetDto(String name, int pocketNumber, double amount) {
+    public PocketGetResponseDto(String name, int pocketNumber, double amount) {
         this.name = name;
         this.pocketNumber = pocketNumber;
         this.amount = amount;

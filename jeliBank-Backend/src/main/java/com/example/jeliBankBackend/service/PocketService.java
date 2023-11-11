@@ -1,11 +1,12 @@
 package com.example.jeliBankBackend.service;
 
+import com.example.jeliBankBackend.dtos.requests.PocketGetRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketTransferRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
+import com.example.jeliBankBackend.dtos.requests.PocketDepositeRequestDto;
+import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
 import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketResponseGetDto;
-import com.example.jeliBankBackend.dtos.responses.PocketTransferResponseDto;
+import com.example.jeliBankBackend.dtos.responses.PocketGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.PocketDepositeResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.model.Pocket;
@@ -36,10 +37,10 @@ public class PocketService {
         int accountNumber = requestDto.getAccountNumber();
 
         try {
-            Optional<AccountResponseGetDto> accountOptional = accountService.getAccountDetails(accountNumber);
+            Optional<AccountGetResponseDto> accountOptional = accountService.getAccountDetails(accountNumber);
 
             if (accountOptional.isPresent()) {
-                AccountResponseGetDto accountDto = accountOptional.get();
+                AccountGetResponseDto accountDto = accountOptional.get();
                 Account account = accountService.AccountResponseGetDtotoEntity(accountDto);
 
                 if (account.getAccountNumber() == 0) {
@@ -71,7 +72,7 @@ public class PocketService {
         }
     }
     // 2 - transferir a bolsillos
-    public PocketTransferResponseDto transferToPocket(PocketTransferRequestDto infoPocket) throws ResourseNotFoundException {
+    public PocketDepositeResponseDto transferToPocket(PocketDepositeRequestDto infoPocket) throws ResourseNotFoundException {
         try {
             Optional<Pocket> optionalPocket = pocketRepository.findById(infoPocket.getPocketNumber());
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(infoPocket.getAccountNumber());
@@ -97,14 +98,14 @@ public class PocketService {
                 pocket.setBalance(newPocketBalance); // actualizo el saldo del bolsillo
                 pocketRepository.save(pocket); // guardo el bolsillo
             }
-            return new PocketTransferResponseDto(accountNumber, pocketNumber, amountToTransfer);
+            return new PocketDepositeResponseDto(accountNumber, pocketNumber, amountToTransfer);
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al transferir el dinero al bolsillo: " + e.getMessage());
         }
     }
 
     // 3 - consultar bolsillos (traer lista de bolsillos por cuenta
-    public List<PocketResponseGetDto> getPocketsByAccount(int accountNumber) throws ResourseNotFoundException {
+    public List<PocketGetResponseDto> getPocketsByAccount(int accountNumber) throws ResourseNotFoundException {
         System.out.println("account number from  service" + accountNumber);
         try {
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(accountNumber);
@@ -113,11 +114,11 @@ public class PocketService {
                 Account account = optionalAccount.get();
                 List<Pocket> pockets = account.getPockets();
                 System.out.println("pokets from service 1 " + pockets);
-                List<PocketResponseGetDto> pocketResponseGetDtos = pockets.stream()
-                        .map(pocket -> new PocketResponseGetDto(pocket.getName(), pocket.getPocketNumber(), pocket.getBalance()))
+                List<PocketGetResponseDto> pocketGetResponseDtos = pockets.stream()
+                        .map(pocket -> new PocketGetResponseDto(pocket.getName(), pocket.getPocketNumber(), pocket.getBalance()))
                         .collect(Collectors.toList());
-                System.out.println("pokets from service 1 " + pocketResponseGetDtos);
-                return pocketResponseGetDtos;
+                System.out.println("pokets from service 1 " + pocketGetResponseDtos);
+                return pocketGetResponseDtos;
 
             } else {
                 throw new ResourseNotFoundException("Cuenta no encontrada");

@@ -1,10 +1,11 @@
 package com.example.jeliBankBackend.controller;
 
+import com.example.jeliBankBackend.dtos.requests.PocketGetRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketTransferRequestDto;
+import com.example.jeliBankBackend.dtos.requests.PocketDepositeRequestDto;
 import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketResponseGetDto;
-import com.example.jeliBankBackend.dtos.responses.PocketTransferResponseDto;
+import com.example.jeliBankBackend.dtos.responses.PocketGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.PocketDepositeResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import com.example.jeliBankBackend.service.PocketService;
@@ -32,16 +33,16 @@ public class PocketController {
     }
 
     // 2- transferir a bolsillos
-    @PostMapping("transfer")
-    public ResponseEntity<PocketTransferResponseDto> transferToPocket(@RequestBody PocketTransferRequestDto pocket) throws ResourseNotFoundException {
-        PocketTransferResponseDto response = this.pocketService.transferToPocket(pocket);
+    @PostMapping("/deposit")
+    public ResponseEntity<PocketDepositeResponseDto> transferToPocket(@RequestBody PocketDepositeRequestDto pocket) throws ResourseNotFoundException {
+        PocketDepositeResponseDto response = this.pocketService.transferToPocket(pocket);
         return ResponseEntity.ok(response);
     }
     // 3 - consultar bolsillos
-    @GetMapping("{accountNumber}/pockets")
-    public List<PocketResponseGetDto> getPocketList(@PathVariable("accountNumber") int accountNumber) throws ResourseNotFoundException {
-        System.out.println("account number from  controller" + accountNumber);
-        List<PocketResponseGetDto> response = this.pocketService.getPocketsByAccount(accountNumber);
+    @GetMapping("{accountNumber}")
+    public List<PocketGetResponseDto> getPocketList(@PathVariable("accountNumber") PocketGetRequestDto accountNumber) throws ResourseNotFoundException {
+        int account = accountNumber.getAccountNumber();
+        List<PocketGetResponseDto> response = this.pocketService.getPocketsByAccount(account);
         return response;
     }
 }

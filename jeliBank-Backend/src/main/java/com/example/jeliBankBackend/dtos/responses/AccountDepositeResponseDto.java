@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountResponseDepositeDto {
+public class AccountDepositeResponseDto {
     private Double amount;
 
-    public AccountResponseDepositeDto(Double amount) {
+    public AccountDepositeResponseDto(Double amount) {
         this.amount = amount;
     }
 }

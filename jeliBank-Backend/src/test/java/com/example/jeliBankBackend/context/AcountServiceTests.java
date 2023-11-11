@@ -1,10 +1,12 @@
 package com.example.jeliBankBackend.context;
+import com.example.jeliBankBackend.dtos.requests.AccountDepositeRequestDto;
 import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
+import com.example.jeliBankBackend.dtos.requests.AccountBlockRequestDto;
+import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
+import com.example.jeliBankBackend.dtos.responses.AccountBlockResponseDto;
+import com.example.jeliBankBackend.dtos.responses.AccountDepositeResponseDto;
 import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
+import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.repository.AccountRepository;
@@ -80,7 +82,9 @@ public class AcountServiceTests {
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.of(account));
 
         // Act
-        AccountResponseDepositeDto result = accountService.depositIntoAccount(accountNumber, amountToDeposit);
+        AccountDepositeRequestDto amount = new AccountDepositeRequestDto(amountToDeposit);
+        accountService.depositIntoAccount(accountNumber,amount);
+        AccountDepositeResponseDto result = new AccountDepositeResponseDto(amountToDeposit);
 
         // Assert
         assertEquals(initialBalance + amountToDeposit, result.getAmount(), 0.001);
@@ -93,32 +97,35 @@ public class AcountServiceTests {
         int accountNumber = 123456;
         double amountToDeposit = 500.0;
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.empty());
+        AccountDepositeRequestDto amount = new AccountDepositeRequestDto(amountToDeposit);
 
+        AccountDepositeResponseDto result = new AccountDepositeResponseDto(amountToDeposit);
         // Act and Assert
         assertThrows(ResourseNotFoundException.class, () ->
-                accountService.depositIntoAccount(accountNumber, amountToDeposit));
+                accountService.depositIntoAccount(accountNumber, amount));
     }
     @Test
     public void testDepositIntoAccount_NegativeAmount() {
         // Arrange
         int accountNumber = 123456;
         double amountToDeposit = -500.0;
-
+        AccountDepositeRequestDto amount = new AccountDepositeRequestDto(amountToDeposit);
         // Act and Assert
         assertThrows(IllegalArgumentException.class, () ->
-                accountService.depositIntoAccount(accountNumber, amountToDeposit));
+                accountService.depositIntoAccount(accountNumber, amount));
     }
     @Test
     public void testDepositIntoAccount_DataAccessException() {
         // Arrange
         int accountNumber = 123456;
         double amountToDeposit = 500.0;
+        AccountDepositeRequestDto amount = new AccountDepositeRequestDto(amountToDeposit);
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.of(new Account()));
         doThrow(new DataAccessException("Simulated data access exception") {}).when(accountRepository).save(any());
 
         // Act and Assert
         assertThrows(ResourseNotFoundException.class, () ->
-                accountService.depositIntoAccount(accountNumber, amountToDeposit));
+                accountService.depositIntoAccount(accountNumber, amount));
     }
 
     // TRANSFER BEETWEEN ACCOUNTS
@@ -138,13 +145,13 @@ public class AcountServiceTests {
         when(accountRepository.getAccountByAccountNumber(destinationAccountNumber)).thenReturn(Optional.of(destinationAccount));
 
         // Act
-        AccountTransferToAccountRequestDto result = accountService.transferBetweenAccounts(
-                new AccountTransferToAccountRequestDto(sourceAccountNumber, destinationAccountNumber, transferAmount));
+        AccountTransferRequestDto result = accountService.transferBetweenAccounts(
+                new AccountTransferRequestDto(sourceAccountNumber, destinationAccountNumber, transferAmount));
 
         // Assert
         assertEquals(sourceAccountNumber, result.getSourceAccountNumber());
         assertEquals(destinationAccountNumber, result.getDestinationAccountNumber());
-        assertEquals(transferAmount, result.getAmount(), 0.001);
+        assertEquals(transferAmount, result.getAmountToTransfer(), 0.001);
         assertEquals(initialSourceBalance - transferAmount, sourceAccount.getBalance(), 0.001);
         assertEquals(initialDestinationBalance + transferAmount, destinationAccount.getBalance(), 0.001);
         verify(accountRepository, times(2)).save(any());
@@ -167,7 +174,7 @@ public class AcountServiceTests {
         // Act and Assert
         assertThrows(ResourseNotFoundException.class, () ->
                 accountService.transferBetweenAccounts(
-                        new AccountTransferToAccountRequestDto(sourceAccountNumber, destinationAccountNumber, transferAmount)));
+                        new AccountTransferRequestDto(sourceAccountNumber, destinationAccountNumber, transferAmount)));
     }
 
     // GET ACCOUNT DETAILS
@@ -182,7 +189,7 @@ public class AcountServiceTests {
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.of(account));
 
         // Act
-        Optional<AccountResponseGetDto> result = accountService.getAccountDetails(accountNumber);
+        Optional<AccountGetResponseDto> result = accountService.getAccountDetails(accountNumber);
 
         // Assert
         assertTrue(result.isPresent());
@@ -197,7 +204,7 @@ public class AcountServiceTests {
         when(accountRepository.getAccountByAccountNumber(accountNumber)).thenReturn(Optional.empty());
 
         // Act
-        Optional<AccountResponseGetDto> result = accountService.getAccountDetails(accountNumber);
+        Optional<AccountGetResponseDto> result = accountService.getAccountDetails(accountNumber);
 
         // Assert
         assertFalse(result.isPresent());
@@ -209,16 +216,16 @@ public class AcountServiceTests {
         Account existingAccount = new Account();
         existingAccount.setIsActive(true);
 
-        AccountStatusRequestDto requestDto = new AccountStatusRequestDto();
+        AccountBlockRequestDto requestDto = new AccountBlockRequestDto();
         requestDto.setAccountNumber(123);  // Replace with a valid account number
 
         when(accountRepository.getAccountByAccountNumber(requestDto.getAccountNumber())).thenReturn(Optional.of(existingAccount));
 
         // Act
-        String result = accountService.toggleAccountStatus(requestDto);
+        AccountBlockResponseDto result = accountService.toggleAccountStatus(requestDto);
 
         // Assert
-        assertTrue(result.contains("Cuenta desactivada"));
+        assertTrue(result.equals("Cuenta desactivada"));
         assertFalse(existingAccount.getIsActive());
         verify(accountRepository, times(1)).save(existingAccount);
     }
@@ -229,16 +236,16 @@ public class AcountServiceTests {
         Account existingAccount = new Account();
         existingAccount.setIsActive(false);
 
-        AccountStatusRequestDto requestDto = new AccountStatusRequestDto();
+        AccountBlockRequestDto requestDto = new AccountBlockRequestDto();
         requestDto.setAccountNumber(456);  // Replace with a valid account number
 
         when(accountRepository.getAccountByAccountNumber(requestDto.getAccountNumber())).thenReturn(Optional.of(existingAccount));
 
         // Act
-        String result = accountService.toggleAccountStatus(requestDto);
+        AccountBlockResponseDto result = accountService.toggleAccountStatus(requestDto);
 
         // Assert
-        assertTrue(result.contains("Cuenta activada"));
+        assertTrue(result.equals("Cuenta activada"));
         assertTrue(existingAccount.getIsActive());
         verify(accountRepository, times(1)).save(existingAccount);
     }
@@ -246,7 +253,7 @@ public class AcountServiceTests {
     @Test
     void testToggleAccountStatus_AccountDoesNotExist() {
         // Arrange
-        AccountStatusRequestDto requestDto = new AccountStatusRequestDto();
+        AccountBlockRequestDto requestDto = new AccountBlockRequestDto();
         requestDto.setAccountNumber(789);  // Replace with an invalid account number
 
         when(accountRepository.getAccountByAccountNumber(requestDto.getAccountNumber())).thenReturn(Optional.empty());
@@ -267,7 +274,7 @@ public class AcountServiceTests {
 
         // Assert
         assertEquals(requestDto.getOwnerName(), result.getOwnerName());
-        assertEquals(requestDto.getBalance(), result.getBalance(), 0.001);
+        assertEquals( result.getBalance(), 0.001);
     }
 
     @Test

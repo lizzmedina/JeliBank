@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountStatusRequestDto {
+public class PocketGetRequestDto {
     private int accountNumber;
 }

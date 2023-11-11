@@ -5,20 +5,20 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountResponseGetDto {
+public class AccountGetResponseDto {
     private int accountNumber;
     private String ownerName;
     private  double balance;
 
-    public AccountResponseGetDto() {
+    public AccountGetResponseDto() {
     }
 
-    public AccountResponseGetDto(String ownerName, double balance) {
+    public AccountGetResponseDto(String ownerName, double balance) {
         this.ownerName = ownerName;
         this.balance = balance;
     }
 
-    public AccountResponseGetDto(int accountNumber, String ownerName, double balance) {
+    public AccountGetResponseDto(int accountNumber, String ownerName, double balance) {
         this.accountNumber = accountNumber;
         this.ownerName = ownerName;
         this.balance = balance;

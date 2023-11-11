@@ -1,15 +1,7 @@
 package com.example.jeliBankBackend.context;
 
-import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
 import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketTransferRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
-import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketTransferResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
-import com.example.jeliBankBackend.model.Account;
-import com.example.jeliBankBackend.model.Pocket;
 import com.example.jeliBankBackend.repository.AccountRepository;
 import com.example.jeliBankBackend.repository.PocketRepository;
 import com.example.jeliBankBackend.service.AccountService;
@@ -18,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;

@@ -1,11 +1,10 @@
 package com.example.jeliBankBackend.controller;
 
-import com.example.jeliBankBackend.dtos.requests.AccountRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountStatusRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountTransferRequestDto;
-import com.example.jeliBankBackend.dtos.requests.AccountTransferToAccountRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseDepositeDto;
-import com.example.jeliBankBackend.dtos.responses.AccountResponseGetDto;
+import com.example.jeliBankBackend.dtos.requests.*;
+import com.example.jeliBankBackend.dtos.responses.AccountBlockResponseDto;
+import com.example.jeliBankBackend.dtos.responses.AccountDepositeResponseDto;
+import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.AccountTransferResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,36 +32,36 @@ public class AccountController {
     }
 
     // 2- deposito en cuenta
-    @PostMapping("/{accountNumber}/transfer")
-    public AccountResponseDepositeDto depositIntoAccount(@PathVariable("accountNumber") int accountNumber, @RequestBody AccountTransferRequestDto depositRequest) throws ResourseNotFoundException {
-        AccountResponseDepositeDto response = this.accountService.depositIntoAccount(accountNumber, depositRequest.getAmountToDeposite());
+    @PostMapping("/{accountNumber}/deposit")
+    public AccountDepositeResponseDto depositIntoAccount(@PathVariable("accountNumber") int accountNumber, @RequestBody AccountDepositeRequestDto depositRequest) throws ResourseNotFoundException {
+        AccountDepositeResponseDto response =  this.accountService.depositIntoAccount(accountNumber, depositRequest);
         return response;
     }
 
     // 3- transferencia entre cuentas
     @PostMapping("/transfer")
-    public AccountTransferToAccountRequestDto transferBetweenAccounts( @RequestBody AccountTransferToAccountRequestDto transferRequest) throws ResourseNotFoundException {
-            AccountTransferToAccountRequestDto response = accountService.transferBetweenAccounts(transferRequest);
+    public AccountTransferResponseDto transferBetweenAccounts(@RequestBody AccountTransferRequestDto transferRequest) throws ResourseNotFoundException {
+        AccountTransferResponseDto response = accountService.transferBetweenAccounts(transferRequest);
             return ResponseEntity.ok(response).getBody();
     }
 
     // 4- consultar cuenta
     @GetMapping("/{accountNumber}")
-    public Optional<AccountResponseGetDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) throws ResourseNotFoundException {
-        Optional<AccountResponseGetDto> response = this.accountService.getAccountDetails(accountNumber);
+    public Optional<AccountGetResponseDto> getAccountDetails(@PathVariable("accountNumber") AccountGetRequestDto accountNumber) throws ResourseNotFoundException {
+        int account = accountNumber.getAccountNumber();
+        Optional<AccountGetResponseDto> response = this.accountService.getAccountDetails(account);
         return response;
     }
 
     //5- bloquear cuenta
     @PutMapping("/block")
-    public ResponseEntity<String> blockAccount(@RequestBody AccountStatusRequestDto requestDto) throws ResourseNotFoundException {
-            String response = accountService.toggleAccountStatus(requestDto);
-            return ResponseEntity.ok(response);
+    public AccountBlockResponseDto blockAccount(@RequestBody AccountBlockRequestDto requestDto) throws ResourseNotFoundException {
+          return accountService.toggleAccountStatus(requestDto);
     }
 
-//    @DeleteMapping("/acount/{acountNumber}")
+//   @DeleteMapping("/acount/{acountNumber}")
 //    public ResponseEntity<?> deleteAcount(@PathVariable Long acountNumber) throws ResourseNotFoundException{
 //        accountService.deleteAcount(acountNumber);
 //        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+//   }
 }

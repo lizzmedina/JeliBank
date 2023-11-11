@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PocketTransferRequestDto {
+public class PocketDepositeRequestDto {
     private int accountNumber;
     private int pocketNumber;
     private double amount;

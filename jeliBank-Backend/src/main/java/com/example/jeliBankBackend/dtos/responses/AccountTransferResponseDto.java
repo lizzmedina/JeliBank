@@ -1,19 +1,16 @@
-package com.example.jeliBankBackend.dtos.requests;
+package com.example.jeliBankBackend.dtos.responses;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountTransferToAccountRequestDto {
+public class AccountTransferResponseDto {
     private int sourceAccountNumber;
     private int destinationAccountNumber;
     private double amount;
 
-    public AccountTransferToAccountRequestDto() {
-    }
-
-    public AccountTransferToAccountRequestDto(int sourceAccountNumber, int destinationAccountNumber, double amount) {
+    public AccountTransferResponseDto(int sourceAccountNumber, int destinationAccountNumber, double amount) {
         this.sourceAccountNumber = sourceAccountNumber;
         this.destinationAccountNumber = destinationAccountNumber;
         this.amount = amount;
