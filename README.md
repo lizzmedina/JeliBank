@@ -64,10 +64,12 @@ This set of technologies offers a solid and efficient environment for the develo
 The application will be available at [http://localhost:8080](http://localhost:8080).
 
 ## Application Usage
+### Test
+ you can test the functionality throw postman or swagger. Swagger it's implemented on the application, to try, once it's running use this link ``` http://localhost:8080/swagger-ui/index.html# ```
 ### Interacting with the Application
   To interact with the application, users can perform various financial transactions, including transfers between accounts and deposits into both accounts and pockets. The application provides the following key functionalities:
 
-#### Account Operations:
+#### Account Operations 
 
 ##### Create an Account:
   Post
@@ -80,7 +82,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ``` 
               {    
                 "ownerName":"lina",
-                "balance": 100.0
+                "initialAmount": 100.0
               }
       ```
 ##### Deposit into an Account:
@@ -109,7 +111,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
       ```     {
                 "sourceAccountNumber":1482758457 ,
                 "destinationAccountNumber": 1289678331,
-                "amount":100.0
+                "amountToTransfer":100.0
               }
       ```           
 ##### Retrieve Account Information:
