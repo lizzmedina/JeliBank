@@ -13,7 +13,7 @@ public class AccountTransferRequestDto {
     public AccountTransferRequestDto() {
     }
 
-    public AccountTransferRequestDto(int sourceAccountNumber, int destinationAccountNumber, double amount) {
+    public AccountTransferRequestDto(int sourceAccountNumber, int destinationAccountNumber, double amountToTransfer) {
         this.sourceAccountNumber = sourceAccountNumber;
         this.destinationAccountNumber = destinationAccountNumber;
         this.amountToTransfer = amountToTransfer;

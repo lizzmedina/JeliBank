@@ -25,6 +25,7 @@ public class AccountService {
     public AccountResponseDto createAccount( AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         try {
             int accountNumber = generateAccountNumber();
+
             if (accountRepository.getAccountByAccountNumber(accountNumber).isPresent()) {
                 throw new ResourseNotFoundException("Ya existe una cuenta con el número de cuenta proporcionado.");
             }
@@ -32,14 +33,13 @@ public class AccountService {
             String ownerName = accountRequestDto.getOwnerName();
             double balance = accountRequestDto.getInitialAmount();
 
-
             Account account = new Account( accountNumber, ownerName, balance);
-
             accountRepository.save(account);
 
             AccountResponseDto responseDto = new AccountResponseDto( ownerName, balance);
 
             return responseDto;
+
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al crear la cuenta: " + e.getMessage());
         }
@@ -136,8 +136,8 @@ public class AccountService {
                 account.setIsActive(!account.getIsActive());
                 accountRepository.save(account);
                 String message = account.getIsActive() ? "Cuenta activada" : "Cuenta desactivada";
-                AccountBlockResponseDto statusMessage = new AccountBlockResponseDto(message);
-                return statusMessage;
+
+                return new AccountBlockResponseDto(message);
             } else {
                 throw new ResourseNotFoundException("Cuenta no encontrada");
             }
