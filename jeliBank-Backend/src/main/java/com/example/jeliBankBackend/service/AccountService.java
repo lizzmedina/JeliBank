@@ -101,30 +101,6 @@ public class AccountService {
     }
 
     // 4- consultar cuenta
-//    public Optional<AccountGetResponseDto> getAccountDetails(AccountGetRequestDto accountNumber) throws ResourseNotFoundException {
-//        try {
-//            int NumberAccount = accountNumber.getAccountNumber();
-//            Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(NumberAccount);
-//
-//            if (optionalAccount.isPresent()) {
-//                Account account = optionalAccount.get();
-//                AccountRequestDto accountRequestDto = new AccountRequestDto(
-//                        account.getOwnerName(),
-//                        account.getBalance()
-//                );
-//                AccountGetResponseDto response = new AccountGetResponseDto(
-//                        NumberAccount,
-//                        accountRequestDto.getOwnerName(),
-//                        accountRequestDto.getInitialAmount());
-//
-//                return Optional.of(response);
-//            } else {
-//                return Optional.empty();
-//            }
-//        } catch (DataAccessException e) {
-//            throw new ResourseNotFoundException("Error al buscar la cuenta: " + e.getMessage());
-//        }
-//    }
     public Optional<AccountGetResponseDto> getAccountDetails(AccountGetRequestDto accountNumberDto) throws ResourseNotFoundException {
         try {
             int accountNumber = accountNumberDto.getAccountNumber();

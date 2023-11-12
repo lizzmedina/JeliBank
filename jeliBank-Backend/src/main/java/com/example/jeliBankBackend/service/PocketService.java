@@ -77,7 +77,7 @@ public class PocketService {
         try {
             Optional<Pocket> optionalPocket = pocketRepository.findById(infoPocket.getPocketNumber());
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(infoPocket.getAccountNumber());
-
+            if (optionalAccount.isPresent() && optionalPocket.isPresent()) {
             Account account = optionalAccount.get();         // tengo la cuenta
             Pocket pocket = optionalPocket.get();            // tengo el bolsillo
             //-----
@@ -98,8 +98,14 @@ public class PocketService {
                 accountService.updateAccountBalance(accountNumber, newAccounBalance); // actualizo el saldo de la cuenta
                 pocket.setBalance(newPocketBalance); // actualizo el saldo del bolsillo
                 pocketRepository.save(pocket); // guardo el bolsillo
+                return new PocketDepositeResponseDto(accountNumber, pocketNumber, amountToTransfer);
+            }else {
+                throw new ResourseNotFoundException("el valor ingresado es mayor al saldo de la cuenta");
             }
-            return new PocketDepositeResponseDto(accountNumber, pocketNumber, amountToTransfer);
+            } else {
+                throw new ResourseNotFoundException("Cuenta o bolsillo no encontrados");
+            }
+
         } catch (DataAccessException e) {
             throw new ResourseNotFoundException("Error al transferir el dinero al bolsillo: " + e.getMessage());
         }
@@ -131,17 +137,4 @@ public class PocketService {
         }
     }
 }
-
-//    public String deletePocket(Long PocketNumber) throws ResourseNotFoundException {
-//        if (pocketRepository.findById(PocketNumber).isPresent()) {
-//            try {
-//                pocketRepository.deleteById(PocketNumber);
-//                return "Bolsillo eliminado exitosamente";
-//            } catch (DataAccessException e) {
-//                throw new ResourseNotFoundException("Error al eliminar el bolsillo: " + e.getMessage());
-//            }
-//        } else {
-//            throw new ResourseNotFoundException("No existe o no fue posible eliminar el bolsillo, por favor revise los datos ingresados e intente nuevamente");
-//        }
-//    }
 
