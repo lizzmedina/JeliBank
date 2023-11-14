@@ -29,6 +29,17 @@
 ### * Log4j
   Version: 1.2.17
   Log4j is used for log management in the application, enabling efficient tracking of events and errors.
+### * JUnit Jupiter API
+  JUnit Jupiter API is utilized for writing and executing unit tests in the JeliBank project.
+### * Spring Boot Test
+  This dependency from Spring Boot simplifies testing in your project by providing utilities and annotations for writing effective unit and integration tests.
+### * Mockito JUnit Jupiter
+  Mockito JUnit Jupiter enables the use of Mockito with JUnit Jupiter for effective unit testing in the JeliBank application.
+### * Spring Boot Starter Security
+  This dependency from Spring Boot provides essential security features to your application, enabling secure authentication and authorization.
+### * jjwt (JSON Web Token)
+  This dependency provides functionality for working with JSON Web Tokens (JWT) in the JeliBank application.
+
   
 This set of technologies offers a solid and efficient environment for the development of banking transactions with Spring Boot, ensuring project quality, maintainability, and scalability.
 
