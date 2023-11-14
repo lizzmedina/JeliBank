@@ -2,7 +2,33 @@
 
 ## Project Overview
   The application facilitates seamless financial management, allowing users to create pockets, perform deposits and transfers, and access comprehensive account and pocket   details. The robust functionality ensures a secure and efficient banking experience.
-  
+
+
+## Problem Statement
+  In the realm of financial management, users often encounter challenges when attempting to seamlessly manage their accounts and associated pockets. Traditional banking systems may lack the flexibility and user-friendly interfaces necessary for efficient transactions. Key issues include:
+
+* Cumbersome processes for creating and managing pockets.
+* Limited options for transferring funds between accounts and pockets.
+* Lack of a comprehensive overview of account and pocket details.
+* Inefficient deposit procedures.
+
+## Solution Overview
+  To address these challenges, the JeliBank was developed. This application serves as a dynamic and user-centric solution to streamline financial transactions and enhance overall banking experiences. 
+
+### Key features include:
+
+* Pocket Creation: Intuitive functionality allows users to effortlessly create pockets associated with their accounts, enabling better fund management.
+* Efficient Transfers: The application facilitates swift and secure fund transfers between accounts and pockets, ensuring flexibility in financial operations.
+* Comprehensive Information Retrieval: Users can easily access detailed information about their accounts and associated pockets, promoting transparency and informed decision-making.
+*User-Friendly Deposit Process: Depositing funds into accounts or pockets has been simplified, contributing to a more user-friendly banking experience.
+
+## How the Program Solves the Problem
+  The JeliBank addresses these challenges through an optimized combination of technology and financial expertise. By leveraging the Spring Boot framework, Java, and a well-designed database model, the application provides users with a reliable and efficient platform for managing their financial transactions.
+
+  The use of RESTful APIs ensures seamless communication between different components of the system, allowing for swift and secure data exchange. Additionally, the implementation of user-friendly interfaces and standardized HTTP requests enhances accessibility and usability.
+
+  Through JeliBank, users can experience a modern and efficient solution to their financial management needs, overcoming the limitations of traditional banking systems.
+
 ## Diagrams
 ![Diagrama de Entidad-Relación](DER.png)
 ![Diagrama Transaccional del Sistema Bancario](transactionalBankSistem.drawio.png)
@@ -29,6 +55,17 @@
 ### * Log4j
   Version: 1.2.17
   Log4j is used for log management in the application, enabling efficient tracking of events and errors.
+### * JUnit Jupiter API
+  JUnit Jupiter API is utilized for writing and executing unit tests in the JeliBank project.
+### * Spring Boot Test
+  This dependency from Spring Boot simplifies testing in your project by providing utilities and annotations for writing effective unit and integration tests.
+### * Mockito JUnit Jupiter
+  Mockito JUnit Jupiter enables the use of Mockito with JUnit Jupiter for effective unit testing in the JeliBank application.
+### * Spring Boot Starter Security
+  This dependency from Spring Boot provides essential security features to your application, enabling secure authentication and authorization.
+### * jjwt (JSON Web Token)
+  This dependency provides functionality for working with JSON Web Tokens (JWT) in the JeliBank application.
+
   
 This set of technologies offers a solid and efficient environment for the development of banking transactions with Spring Boot, ensuring project quality, maintainability, and scalability.
 
@@ -193,30 +230,5 @@ Lista cualquier problema o bug conocido y, si es posible, proporciona soluciones
 ## links
 
 ### cómo se optiene el token de seguridad
-
-## Problem Statement
-  In the realm of financial management, users often encounter challenges when attempting to seamlessly manage their accounts and associated pockets. Traditional banking systems may lack the flexibility and user-friendly interfaces necessary for efficient transactions. Key issues include:
-
-* Cumbersome processes for creating and managing pockets.
-* Limited options for transferring funds between accounts and pockets.
-* Lack of a comprehensive overview of account and pocket details.
-* Inefficient deposit procedures.
-
-## Solution Overview
-  To address these challenges, the JeliBank was developed. This application serves as a dynamic and user-centric solution to streamline financial transactions and enhance overall banking experiences. 
-
-### Key features include:
-
-* Pocket Creation: Intuitive functionality allows users to effortlessly create pockets associated with their accounts, enabling better fund management.
-* Efficient Transfers: The application facilitates swift and secure fund transfers between accounts and pockets, ensuring flexibility in financial operations.
-* Comprehensive Information Retrieval: Users can easily access detailed information about their accounts and associated pockets, promoting transparency and informed decision-making.
-*User-Friendly Deposit Process: Depositing funds into accounts or pockets has been simplified, contributing to a more user-friendly banking experience.
-
-## How the Program Solves the Problem
-  The JeliBank addresses these challenges through an optimized combination of technology and financial expertise. By leveraging the Spring Boot framework, Java, and a well-designed database model, the application provides users with a reliable and efficient platform for managing their financial transactions.
-
-  The use of RESTful APIs ensures seamless communication between different components of the system, allowing for swift and secure data exchange. Additionally, the implementation of user-friendly interfaces and standardized HTTP requests enhances accessibility and usability.
-
-  Through JeliBank, users can experience a modern and efficient solution to their financial management needs, overcoming the limitations of traditional banking systems.
 
 
