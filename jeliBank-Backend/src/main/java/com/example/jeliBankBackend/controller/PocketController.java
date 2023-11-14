@@ -1,11 +1,11 @@
 package com.example.jeliBankBackend.controller;
 
-import com.example.jeliBankBackend.dtos.requests.PocketGetRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketDepositeRequestDto;
-import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketGetResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketDepositeResponseDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketGetRequestDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketRequestDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketDepositeRequestDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketResponseDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketDepositeResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import com.example.jeliBankBackend.service.PocketService;

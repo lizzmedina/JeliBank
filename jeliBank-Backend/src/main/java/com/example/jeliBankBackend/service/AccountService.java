@@ -1,7 +1,7 @@
 package com.example.jeliBankBackend.service;
 
-import com.example.jeliBankBackend.dtos.requests.*;
-import com.example.jeliBankBackend.dtos.responses.*;
+import com.example.jeliBankBackend.dtos.requests.account.*;
+import com.example.jeliBankBackend.dtos.responses.account.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.repository.AccountRepository;
@@ -22,7 +22,7 @@ public class AccountService {
 
 
 // 1- apertura de  cuenta
-    public AccountResponseDto createAccount( AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
+    public AccountResponseDto createAccount(AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         try {
             int accountNumber = generateAccountNumber();
 

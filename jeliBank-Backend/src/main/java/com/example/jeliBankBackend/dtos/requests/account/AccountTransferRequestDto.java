@@ -1,4 +1,4 @@
-package com.example.jeliBankBackend.dtos.requests;
+package com.example.jeliBankBackend.dtos.requests.account;
 
 import lombok.Getter;
 import lombok.Setter;

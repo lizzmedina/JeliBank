@@ -1,9 +1,9 @@
 package com.example.jeliBankBackend.context.service;
 
+import com.example.jeliBankBackend.dtos.requests.account.*;
+import com.example.jeliBankBackend.dtos.responses.account.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.example.jeliBankBackend.dtos.requests.*;
-import com.example.jeliBankBackend.dtos.responses.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.repository.AccountRepository;

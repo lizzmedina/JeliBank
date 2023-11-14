@@ -1,13 +1,13 @@
 package com.example.jeliBankBackend.service;
 
-import com.example.jeliBankBackend.dtos.requests.AccountGetRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketGetRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
-import com.example.jeliBankBackend.dtos.requests.PocketDepositeRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketGetResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketDepositeResponseDto;
+import com.example.jeliBankBackend.dtos.requests.account.AccountGetRequestDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketGetRequestDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketRequestDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketDepositeRequestDto;
+import com.example.jeliBankBackend.dtos.responses.account.AccountGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketResponseDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketDepositeResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.model.Pocket;
@@ -78,26 +78,26 @@ public class PocketService {
             Optional<Pocket> optionalPocket = pocketRepository.findById(infoPocket.getPocketNumber());
             Optional<Account> optionalAccount = accountRepository.getAccountByAccountNumber(infoPocket.getAccountNumber());
             if (optionalAccount.isPresent() && optionalPocket.isPresent()) {
-            Account account = optionalAccount.get();         // tengo la cuenta
-            Pocket pocket = optionalPocket.get();            // tengo el bolsillo
+            Account account = optionalAccount.get();
+            Pocket pocket = optionalPocket.get();
             //-----
-            double amountToTransfer = infoPocket.getAmount(); // valor a transferir -> 20
+            double amountToTransfer = infoPocket.getAmount();
             //-----
-            int accountNumber = account.getAccountNumber(); // numero de la cuenta
+            int accountNumber = account.getAccountNumber();
             //-----
-            int pocketNumber = infoPocket.getPocketNumber(); // numero del bolsillo
+            int pocketNumber = infoPocket.getPocketNumber();
             //-----
-            double currentAccountBalance = account.getBalance();    // saldo cuenta actual -> 100
+            double currentAccountBalance = account.getBalance();
             //-----
-            double currentPocketBalance = pocket.getBalance(); // saldo del bolsillo actual -> 50
+            double currentPocketBalance = pocket.getBalance();
             //-----
-            double newPocketBalance = currentPocketBalance + amountToTransfer; // nuevo saldo bolsillo -> 50 + 20
-            double newAccounBalance = currentAccountBalance - amountToTransfer;// nuevo saldo cuenta -> 100 - 20
+            double newPocketBalance = currentPocketBalance + amountToTransfer;
+            double newAccounBalance = currentAccountBalance - amountToTransfer;
             //-----
             if (currentAccountBalance >= amountToTransfer) {
-                accountService.updateAccountBalance(accountNumber, newAccounBalance); // actualizo el saldo de la cuenta
-                pocket.setBalance(newPocketBalance); // actualizo el saldo del bolsillo
-                pocketRepository.save(pocket); // guardo el bolsillo
+                accountService.updateAccountBalance(accountNumber, newAccounBalance);
+                pocket.setBalance(newPocketBalance);
+                pocketRepository.save(pocket);
                 return new PocketDepositeResponseDto(accountNumber, pocketNumber, amountToTransfer);
             }else {
                 throw new ResourseNotFoundException("el valor ingresado es mayor al saldo de la cuenta");

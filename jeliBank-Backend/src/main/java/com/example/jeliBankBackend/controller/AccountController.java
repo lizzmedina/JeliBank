@@ -1,7 +1,7 @@
 package com.example.jeliBankBackend.controller;
 
-import com.example.jeliBankBackend.dtos.requests.*;
-import com.example.jeliBankBackend.dtos.responses.*;
+import com.example.jeliBankBackend.dtos.requests.account.*;
+import com.example.jeliBankBackend.dtos.responses.account.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

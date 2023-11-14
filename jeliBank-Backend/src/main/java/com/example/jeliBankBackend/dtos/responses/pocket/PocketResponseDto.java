@@ -1,4 +1,4 @@
-package com.example.jeliBankBackend.dtos.responses;
+package com.example.jeliBankBackend.dtos.responses.pocket;
 
 import lombok.Getter;
 import lombok.Setter;

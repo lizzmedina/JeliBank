@@ -1,8 +1,8 @@
 package com.example.jeliBankBackend.context.service;
 
-import com.example.jeliBankBackend.dtos.requests.PocketRequestDto;
-import com.example.jeliBankBackend.dtos.responses.AccountGetResponseDto;
-import com.example.jeliBankBackend.dtos.responses.PocketResponseDto;
+import com.example.jeliBankBackend.dtos.requests.pocket.PocketRequestDto;
+import com.example.jeliBankBackend.dtos.responses.account.AccountGetResponseDto;
+import com.example.jeliBankBackend.dtos.responses.pocket.PocketResponseDto;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.model.Account;
 import com.example.jeliBankBackend.model.Pocket;
