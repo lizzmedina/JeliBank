@@ -1,12 +1,11 @@
 package com.example.jeliBankBackend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "pockets")
 @Getter
 @Setter
 @NoArgsConstructor

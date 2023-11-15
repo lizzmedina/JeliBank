@@ -16,7 +16,6 @@ import java.util.Optional;
 public class AccountController {
 
     private AccountService accountService;
-    private UserRepository userRepository;
 
     @Autowired
     public AccountController(AccountService accountServicee){
@@ -26,7 +25,6 @@ public class AccountController {
     // 1- apertura de  cuenta
     @PostMapping()
     public AccountResponseDto createAcount (@RequestBody AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
-
             return this.accountService.createAccount(accountRequestDto);
     }
 
