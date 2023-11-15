@@ -21,7 +21,7 @@ public class AccountService {
     }
 
 
-// 1- apertura de  cuenta
+    // 1- apertura de  cuenta
     public AccountResponseDto createAccount(AccountRequestDto accountRequestDto) throws ResourseNotFoundException {
         try {
             int accountNumber = generateAccountNumber();
@@ -44,6 +44,7 @@ public class AccountService {
             throw new ResourseNotFoundException("Error al crear la cuenta: " + e.getMessage());
         }
     }
+
 
 // 2- deposito en cuenta
     public AccountDepositeResponseDto depositIntoAccount(int accountNumber, AccountDepositeRequestDto amount) throws ResourseNotFoundException {

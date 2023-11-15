@@ -1,24 +1,26 @@
 package com.example.jeliBankBackend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "accounts")
 public class Account {
     @Id
     @Column(name = "account_number")
     private int accountNumber;
+
     @Column(name = "ownerName")
     private String ownerName;
+
     @Column(name = "balance")
     private  double balance;
 
@@ -28,7 +30,7 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Pocket> pockets = new ArrayList<>();
 
-    public Account( String ownerName, double balance) {
+    public Account(String ownerName, double balance) {
         this.ownerName = ownerName;
         this.balance = balance;
     }
@@ -39,8 +41,6 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account() {
-    }
 
     // ... otros métodos ...
 

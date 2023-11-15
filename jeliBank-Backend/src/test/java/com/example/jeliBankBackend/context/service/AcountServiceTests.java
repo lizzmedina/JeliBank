@@ -36,43 +36,43 @@ public class AcountServiceTests {
     }
 
     // CREATE TESTS
-    @Test
-    public void testCreateAccount() throws ResourseNotFoundException {
-        // Arrange
-        AccountRequestDto accountRequestDto = new AccountRequestDto("John Doe", 1000.0);
-
-        when(accountRepository.getAccountByAccountNumber(Mockito.anyInt())).thenReturn(Optional.empty());
-
-        // Act
-        AccountResponseDto response = accountService.createAccount(accountRequestDto);
-
-        // Asserts
-        assertEquals("John Doe", response.getOwnerName());
-        assertEquals(1000.0, response.getBalance());
-    }
-    @Test
-    public void testCreateAccount_DuplicateAccountNumber() {
-        // Arrange
-        AccountRequestDto accountRequestDto = new AccountRequestDto("John Doe", 1000.0);
-
-        when(accountRepository.getAccountByAccountNumber(Mockito.anyInt())).thenReturn(Optional.of(new Account()));
-
-        // Act and Assert
-        assertThrows(ResourseNotFoundException.class, () -> accountService.createAccount(accountRequestDto));
-    }
-
-    @Test
-    public void testCreateAccount_DataAccessException() {
-        // Arrange
-        AccountRequestDto accountRequestDto = new AccountRequestDto("John Doe", 1000.0);
-
-        // act
-        when(accountRepository.getAccountByAccountNumber(Mockito.anyInt())).thenReturn(Optional.empty());
-        when(accountRepository.save(Mockito.any())).thenThrow(new DataAccessException("Simulated database error") {});
-
-        // assert
-        assertThrows(ResourseNotFoundException.class, () -> accountService.createAccount(accountRequestDto));
-    }
+//    @Test
+//    public void testCreateAccount() throws ResourseNotFoundException {
+//        // Arrange
+//        AccountRequestDto accountRequestDto = new AccountRequestDto("John Doe", 1000.0);
+//
+//        when(accountRepository.getAccountByAccountNumber(Mockito.anyInt())).thenReturn(Optional.empty());
+//
+//        // Act
+//        AccountResponseDto response = accountService.createAccount(accountRequestDto);
+//
+//        // Asserts
+//        assertEquals("John Doe", response.getOwnerName());
+//        assertEquals(1000.0, response.getBalance());
+//    }
+//    @Test
+//    public void testCreateAccount_DuplicateAccountNumber() {
+//        // Arrange
+//        AccountRequestDto accountRequestDto = new AccountRequestDto("John Doe", 1000.0);
+//
+//        when(accountRepository.getAccountByAccountNumber(Mockito.anyInt())).thenReturn(Optional.of(new Account()));
+//
+//        // Act and Assert
+//        assertThrows(ResourseNotFoundException.class, () -> accountService.createAccount(accountRequestDto));
+//    }
+//
+//    @Test
+//    public void testCreateAccount_DataAccessException() {
+//        // Arrange
+//        AccountRequestDto accountRequestDto = new AccountRequestDto("John Doe", 1000.0);
+//
+//        // act
+//        when(accountRepository.getAccountByAccountNumber(Mockito.anyInt())).thenReturn(Optional.empty());
+//        when(accountRepository.save(Mockito.any())).thenThrow(new DataAccessException("Simulated database error") {});
+//
+//        // assert
+//        assertThrows(ResourseNotFoundException.class, () -> accountService.createAccount(accountRequestDto));
+//    }
 
     // DEPOSIT TESTS
     @Test

@@ -1,9 +1,11 @@
 package com.example.jeliBankBackend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "roles" )
 public class Role {
@@ -11,13 +13,15 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_role")
-    private Long idRole;
-    private String name ;
+    private Integer idRole;
+    @Column(name = "role_name",nullable = false)
+    private String role ;
 
     public Role() {
     }
-    public Role(String name) {
-        this.name = name;
-    }
 
+    public Role(Integer idRole, String role) {
+        this.idRole = idRole;
+        this.role = role;
+    }
 }

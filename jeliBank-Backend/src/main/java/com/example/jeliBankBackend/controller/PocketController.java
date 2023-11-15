@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pockets")
+@RequestMapping("/api/pockets/")
 public class PocketController {
     private final AccountService accountService;
     private final PocketService pocketService;
@@ -33,7 +33,7 @@ public class PocketController {
     }
 
     // 2- transferir a bolsillos
-    @PostMapping("/deposit")
+    @PostMapping("deposit")
     public ResponseEntity<PocketDepositeResponseDto> transferToPocket(@RequestBody PocketDepositeRequestDto pocket) throws ResourseNotFoundException {
         PocketDepositeResponseDto response = this.pocketService.transferToPocket(pocket);
         return ResponseEntity.ok(response);

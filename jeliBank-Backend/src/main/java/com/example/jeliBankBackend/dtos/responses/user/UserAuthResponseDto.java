@@ -1,11 +1,12 @@
 package com.example.jeliBankBackend.dtos.responses.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UserAuthResponseDto {
     private String accessToken;
-    private String tokenType = "Bearer ";
 
     public UserAuthResponseDto(String accessToken) {
         this.accessToken = accessToken;
