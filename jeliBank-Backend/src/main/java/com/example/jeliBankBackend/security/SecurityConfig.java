@@ -54,8 +54,9 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "api/accounts/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/pockets/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/accounts/").permitAll()
+                .requestMatchers( "/api/accounts/**").permitAll()
+                .requestMatchers("/api/pockets/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

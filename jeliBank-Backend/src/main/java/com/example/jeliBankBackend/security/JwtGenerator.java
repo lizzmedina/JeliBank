@@ -21,7 +21,7 @@ public class JwtGenerator {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expirationToken)
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SIGNATURE.getBytes())
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SIGNATURE)
                 .compact();
         return token;
     }
@@ -38,9 +38,10 @@ public class JwtGenerator {
     // Method to validate token
     public Boolean validateToken(String token){
         try {
-            Jwts.parser().setSigningKey(SecurityConstants.JWT_SIGNATURE.getBytes()).parse(token);
+            Jwts.parser().setSigningKey(SecurityConstants.JWT_SIGNATURE).parse(token);
             return true;
         }catch (Exception e){
+            System.out.println("exception0" + e);
             throw new ArithmeticException("El token ha expirado o es incorrecto");
         }
     }

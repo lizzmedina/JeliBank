@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/accounts")
+@RequestMapping("/api/accounts/")
 public class AccountController {
 
     private final AccountService accountService;
@@ -29,21 +29,21 @@ public class AccountController {
     }
 
     // 2- deposito en cuenta
-    @PostMapping("/{accountNumber}/deposit")
+    @PostMapping("{accountNumber}/deposit")
     public AccountDepositeResponseDto depositIntoAccount(@PathVariable("accountNumber") int accountNumber, @RequestBody AccountDepositeRequestDto depositRequest) throws ResourseNotFoundException {
         AccountDepositeResponseDto response =  this.accountService.depositIntoAccount(accountNumber, depositRequest);
         return response;
     }
 
     // 3- transferencia entre cuentas
-    @PostMapping("/transfer")
+    @PostMapping("transfer")
     public AccountTransferResponseDto transferBetweenAccounts(@RequestBody AccountTransferRequestDto transferRequest) throws ResourseNotFoundException {
         AccountTransferResponseDto response = accountService.transferBetweenAccounts(transferRequest);
             return ResponseEntity.ok(response).getBody();
     }
 
     // 4- consultar cuenta
-    @GetMapping("/{accountNumber}")
+    @GetMapping("{accountNumber}")
     public Optional<AccountGetResponseDto> getAccountDetails(@PathVariable("accountNumber") int accountNumber) throws ResourseNotFoundException {
         AccountGetRequestDto accountNumberDto = new AccountGetRequestDto(accountNumber);
         accountNumberDto.setAccountNumber(accountNumber);
