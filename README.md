@@ -61,7 +61,7 @@
   This dependency from Spring Boot provides essential security features to your application, enabling secure authentication and authorization.
 ### * jwt (JSON Web Token)
   This dependency provides functionality for working with JSON Web Tokens (JWT) in the JeliBank application.
-
+---------------------------------------
   
 This set of technologies offers a solid and efficient environment for the development of banking transactions with Spring Boot, ensuring project quality, maintainability, and scalability.
 
@@ -210,7 +210,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
     ```
   
   Description: Retrieves a list of pockets associated with the specified account.
-\
+---------------------------------------
 Users can interact with these functionalities either through a user-friendly interface or by utilizing the provided API endpoints. For API interactions, examples of HTTP requests can be provided using tools like cURL or Postman.
 
 ## Contributing
