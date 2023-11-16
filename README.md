@@ -25,7 +25,7 @@
 ## How the Program Solves the Problem
   The JeliBank addresses these challenges through an optimized combination of technology and financial expertise. By leveraging the Spring Boot framework, Java, and a well-designed database model, the application provides users with a reliable and efficient platform for managing their financial transactions.
 
-  The use of RESTful APIs ensures seamless communication between different components of the system, allowing for swift and secure data exchange. Additionally, the implementation of user-friendly interfaces and standardized HTTP requests enhances accessibility and usability.
+  The use of RESTful APIs ensures seamless communication between different components of the system, allowing for swift and secure data exchange. Additionally has standardized HTTP requests enhances accessibility and usability.
 
   Through JeliBank, users can experience a modern and efficient solution to their financial management needs, overcoming the limitations of traditional banking systems.
 
@@ -36,8 +36,7 @@
 ## Technologies Used
 
 ### * Language: Java
-  version 17
-  The project is developed using the Java programming language, known for its portability and robustness in enterprise application development.
+  The project is developed using the Java programming language, version 17, known for its portability and robustness in enterprise application development.
 ### * Framework: Spring Boot
   Spring Boot is employed as the primary development framework, providing an easy-to-use architecture for building Java applications based on the "convention over configuration" principle.
 ### * RESTful API with Spring MVC
@@ -52,9 +51,6 @@
   These are Spring Boot starters that facilitate the development of applications with Java Persistence API (JPA) for the persistence layer and Spring Web for creating web services.
 ### * Spring Boot Starter Test
   Spring Boot Starter Test provides tools and annotations for writing effective unit and integration tests.
-### * Log4j
-  Version: 1.2.17
-  Log4j is used for log management in the application, enabling efficient tracking of events and errors.
 ### * JUnit Jupiter API
   JUnit Jupiter API is utilized for writing and executing unit tests in the JeliBank project.
 ### * Spring Boot Test
@@ -63,7 +59,7 @@
   Mockito JUnit Jupiter enables the use of Mockito with JUnit Jupiter for effective unit testing in the JeliBank application.
 ### * Spring Boot Starter Security
   This dependency from Spring Boot provides essential security features to your application, enabling secure authentication and authorization.
-### * jjwt (JSON Web Token)
+### * jwt (JSON Web Token)
   This dependency provides functionality for working with JSON Web Tokens (JWT) in the JeliBank application.
 
   
@@ -79,14 +75,14 @@ This set of technologies offers a solid and efficient environment for the develo
 ## Project Configuration
 
   1. Clone the repository to your local machine:
-      git clone https://github.com/lizzmedina/JeliBank.git
+      ``` git clone https://github.com/lizzmedina/JeliBank.git ```
       
   2. Navega al directorio del proyecto:
      
           ``` bash
           cd tuproyecto
           ```
-  4. Configure the database in the application.properties file with your MySQL credentials
+  3. Configure the database in the application.yml file with your MySQL credentials
 
 ## Compilation and Execution
   1. Compile the project using Maven:  
@@ -214,21 +210,19 @@ The application will be available at [http://localhost:8080](http://localhost:80
     ```
   
   Description: Retrieves a list of pockets associated with the specified account.
-
+\
 Users can interact with these functionalities either through a user-friendly interface or by utilizing the provided API endpoints. For API interactions, examples of HTTP requests can be provided using tools like cURL or Postman.
 
-## Contribuir
-Si deseas contribuir a este proyecto, sigue los pasos a continuación:
+## Contributing
+  If you want to contribute to this project, follow the steps below:
 
-Crea un fork del proyecto
-Crea una rama para tus cambios
-Realiza tus modificaciones y prueba
-Envía un pull request
-Problemas Conocidos
-Lista cualquier problema o bug conocido y, si es posible, proporciona soluciones o workarounds.
+  * Fork the project.
+  * Create a branch for your changes.
+  * Make your modifications and test them.
+  * Submit a pull request.
+  * Known Issues
+  * List any known problems or bugs, and if possible, provide solutions or workarounds.
 
-## links
-
-### cómo se optiene el token de seguridad
-
+## How to Obtain the Security Token
+  When registering a user in the application and subsequently logging in, the system generates a security token. This token allows access to other functionalities such as creating accounts and wallets.
 
