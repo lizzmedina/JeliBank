@@ -4,6 +4,8 @@ import com.example.jeliBankBackend.dtos.requests.account.*;
 import com.example.jeliBankBackend.dtos.responses.account.*;
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@SecurityRequirement(name = "BearerAuth")
 @RequestMapping("/api/accounts/")
 public class AccountController {
 
@@ -29,6 +32,7 @@ public class AccountController {
     }
 
     // 2- deposito en cuenta
+
     @PostMapping("{accountNumber}/deposit")
     public AccountDepositeResponseDto depositIntoAccount(@PathVariable("accountNumber") int accountNumber, @RequestBody AccountDepositeRequestDto depositRequest) throws ResourseNotFoundException {
         AccountDepositeResponseDto response =  this.accountService.depositIntoAccount(accountNumber, depositRequest);

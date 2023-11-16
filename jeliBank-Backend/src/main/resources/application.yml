@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
   datasource:
     url: jdbc:mysql://localhost/jelibank?serverTimezone=America/Bogota
     driver-class-name: com.mysql.cj.jdbc.Driver

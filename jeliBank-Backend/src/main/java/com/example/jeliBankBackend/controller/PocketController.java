@@ -9,11 +9,12 @@ import com.example.jeliBankBackend.dtos.responses.pocket.PocketDepositeResponseD
 import com.example.jeliBankBackend.exceptions.ResourseNotFoundException;
 import com.example.jeliBankBackend.service.AccountService;
 import com.example.jeliBankBackend.service.PocketService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@SecurityRequirement(name = "BearerAuth")
 @RestController
 @RequestMapping("/api/pockets/")
 public class PocketController {
