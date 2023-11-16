@@ -30,8 +30,8 @@
   Through JeliBank, users can experience a modern and efficient solution to their financial management needs, overcoming the limitations of traditional banking systems.
 
 ## Diagrams
-![Diagrama de Entidad-Relación](DER.png)
-![Diagrama Transaccional del Sistema Bancario](transactionalBankSistem.drawio.png)
+![Diagrama de Entidad-Relación](DERconAutentication.png)
+![Diagrama Transaccional del Sistema Bancario](transactionalBankSistem.drawioUML.png)
 
 ## Technologies Used
 
