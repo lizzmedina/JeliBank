@@ -203,17 +203,4 @@ public class AccountService {
         }
     }
 
-
-//    public String deleteAcount(Long acountNumber) throws ResourseNotFoundException {
-//        if (acountRepository.findById(acountNumber).isPresent()){
-//            try {
-//                acountRepository.deleteById(acountNumber);
-//                return "Cuenta eliminada exitosamente";
-//            } catch (DataAccessException e) {
-//                throw new ResourseNotFoundException("Error al eliminar la cuenta: " + e.getMessage());
-//            }
-//        }else  {
-//            throw new ResourseNotFoundException("No existe o no fue posible eliminar la cuenta, por favor revise los datos ingresados e intente nuevamnete");
-//        }
-//    }
 }

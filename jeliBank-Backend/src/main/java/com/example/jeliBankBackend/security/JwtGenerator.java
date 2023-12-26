@@ -41,7 +41,6 @@ public class JwtGenerator {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SIGNATURE).parse(token);
             return true;
         }catch (Exception e){
-            System.out.println("exception0" + e);
             throw new ArithmeticException("El token ha expirado o es incorrecto");
         }
     }

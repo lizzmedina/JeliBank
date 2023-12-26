@@ -56,12 +56,8 @@ public class UserController {
 
     @PostMapping("login")
     public ResponseEntity<UserAuthResponseDto> login(@RequestBody UserLoginDto dtoLogin){
-        System.out.println("peticion login " + dtoLogin);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 dtoLogin.getUserName(), dtoLogin.getPassword()));
-        System.out.println("new algo del login " + new UsernamePasswordAuthenticationToken(
-                dtoLogin.getUserName(), dtoLogin.getPassword()));
-        System.out.println("authentication -login " + authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
         return new ResponseEntity<>(new UserAuthResponseDto(token), HttpStatus.OK);
